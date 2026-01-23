@@ -1,0 +1,19 @@
+{
+  "slide1": {
+    "title": "Welcome to LingvAI!",
+    "description": "Test your Reading, Listening, Speaking, and Writing skills like IELTS.",
+    "button": "Continue"
+  },
+  "slide2": {
+    "title": "Accurately Evaluate Your Level",
+    "description": "Fairly evaluate your results on a 9-point system — and get recommendations to improve your level.",
+    "aiFeedbackTitle": "AI FEEDBACK",
+    "aiFeedbackSubtitle": "Recommendations to improve",
+    "button": "Continue"
+  },
+  "slide3": {
+    "title": "Track Your Progress Regularly",
+    "description": "Track your growth and achieve your desired results faster in the IELTS exam.",
+    "button": "Continue"
+  }
+}

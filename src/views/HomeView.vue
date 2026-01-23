@@ -4,10 +4,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
-// Home view component
-</script>
 
+<script setup lang="ts">
+
+</script>
 <style scoped lang="scss">
 .home-view {
   padding: var(--spacing-md);

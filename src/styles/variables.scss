@@ -1,4 +1,4 @@
-// CSS Variables for theming
+// CSS Variables for LingvAI Design System
 :root {
   // Safe area insets for mobile devices (notch/status bar)
   --safe-area-inset-top: env(safe-area-inset-top, 0px);
@@ -6,31 +6,96 @@
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
   --safe-area-inset-left: env(safe-area-inset-left, 0px);
 
-  // Colors
-  --color-primary: #1989fa;
+  // Primary Colors
+  --color-primary: #a175f0;
+  --color-primary-light: #b894f5;
+  --color-primary-dark: #8a5de8;
+  --color-primary-gradient-start: #a175f0;
+  --color-primary-gradient-end: #8a5de8;
+
+  // Background Colors
+  --color-background-white: #ffffff;
+  --color-background-gradient-start: #a175f0;
+  --color-background-gradient-end: #8a5de8;
+
+  // Text Colors
+  --color-text-primary: #323233;
+  --color-text-primary-black: #000000;
+  --color-text-primary-white: #ffffff;
+  --color-text-secondary: #969799;
+  --color-text-tertiary: #c8c9cc;
+
+  // Accent Colors (for skill icons and highlights)
+  --color-accent-blue: #4a9eff;
+  --color-accent-orange: #ff976a;
+  --color-accent-green: #07c160;
+  --color-accent-pink: #ff6b9d;
+
+  // Status Colors
   --color-success: #07c160;
   --color-warning: #ff976a;
   --color-danger: #ee0a24;
-  --color-text: #323233;
-  --color-text-secondary: #969799;
+  --color-info: #4a9eff;
+
+  // Border Colors
   --color-border: #ebedf0;
-  --color-background: #f7f8fa;
+  --color-border-light: #f2f3f5;
+  --color-border-dark: #dcdee0;
 
-  // Spacing
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
+  // Spacing (8px base scale)
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 40px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
 
-  // Border radius
-  --border-radius-sm: 2px;
-  --border-radius-md: 4px;
-  --border-radius-lg: 8px;
-  --border-radius-xl: 12px;
+  // Border Radius (Medium scale)
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-lg: 16px;
+  --border-radius-xl: 24px;
+  --border-radius-full: 9999px; // For pill-shaped buttons
 
-  // Shadows
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.15);
+  // Shadows (Subtle)
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.08);
+
+  // Typography - Font Sizes
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 28px;
+  --font-size-4xl: 32px;
+
+  // Typography - Font Weights
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  // Typography - Line Heights
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  // Icon Sizes
+  --icon-size-sm: 16px;
+  --icon-size-md: 20px;
+  --icon-size-lg: 24px;
+  --icon-size-xl: 32px;
+
+  // Z-index scale
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
 }

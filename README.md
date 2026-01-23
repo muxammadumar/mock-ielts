@@ -1,6 +1,8 @@
-# Mock IELTS Platform
+# LingvAI
 
-A Vue 3 + TypeScript + Vite web application for IELTS mock tests, optimized for mobile webview usage in superapps.
+LingvAI - AI-powered language learning and IELTS preparation platform
+
+A Vue 3 + TypeScript + Vite web application optimized for mobile webview usage in superapps.
 
 ## Tech Stack
 
@@ -16,7 +18,7 @@ A Vue 3 + TypeScript + Vite web application for IELTS mock tests, optimized for 
 ## Project Structure
 
 ```
-mock-ielts/
+lingvai/
 ├── src/
 │   ├── assets/          # Static assets
 │   ├── components/      # Reusable components

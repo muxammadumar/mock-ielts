@@ -10,19 +10,34 @@ html,
 body {
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
+  position: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+  font-family:
+    'Plus Jakarta Sans',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    'Noto Sans',
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
     'Noto Color Emoji';
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--color-text);
-  background-color: var(--color-background);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-white);
   // Support safe area insets
   padding-top: var(--safe-area-inset-top);
   padding-bottom: var(--safe-area-inset-bottom);
@@ -30,8 +45,8 @@ body {
 
 #app {
   width: 100%;
-  min-height: 100vh;
-  min-height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  height: 100%;
+  overflow: hidden;
 }
 
 // Touch-friendly styles
@@ -47,4 +62,177 @@ a {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+// Gradient Background Utilities
+.bg-gradient-purple {
+  background: linear-gradient(
+    180deg,
+    var(--color-background-gradient-start) 0%,
+    var(--color-background-gradient-end) 100%
+  );
+  color: var(--color-text-primary-white);
+}
+
+.bg-gradient-purple-horizontal {
+  background: linear-gradient(
+    90deg,
+    var(--color-background-gradient-start) 0%,
+    var(--color-background-gradient-end) 100%
+  );
+  color: var(--color-text-primary-white);
+}
+
+// Text color utilities
+.text-white {
+  color: var(--color-text-primary-white);
+}
+
+.text-black {
+  color: var(--color-text-primary-black);
+}
+
+.text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-tertiary {
+  color: var(--color-text-tertiary);
+}
+
+// Card utilities (flat design)
+.card {
+  background-color: var(--color-background-white);
+  border-radius: var(--border-radius-lg);
+  // Flat cards - no shadow or minimal shadow
+}
+
+.card-gradient {
+  background: linear-gradient(
+    180deg,
+    var(--color-background-gradient-start) 0%,
+    var(--color-background-gradient-end) 100%
+  );
+  border-radius: var(--border-radius-lg);
+  color: var(--color-text-primary-white);
+}
+
+// Button utilities (rounded/pill-shaped)
+.btn-rounded {
+  border-radius: var(--border-radius-full);
+}
+
+// Spacing utilities
+.p-xs {
+  padding: var(--spacing-xs);
+}
+
+.p-sm {
+  padding: var(--spacing-sm);
+}
+
+.p-md {
+  padding: var(--spacing-md);
+}
+
+.p-lg {
+  padding: var(--spacing-lg);
+}
+
+.p-xl {
+  padding: var(--spacing-xl);
+}
+
+.m-xs {
+  margin: var(--spacing-xs);
+}
+
+.m-sm {
+  margin: var(--spacing-sm);
+}
+
+.m-md {
+  margin: var(--spacing-md);
+}
+
+.m-lg {
+  margin: var(--spacing-lg);
+}
+
+.m-xl {
+  margin: var(--spacing-xl);
+}
+
+// Typography utilities
+.text-xs {
+  font-size: var(--font-size-xs);
+}
+
+.text-sm {
+  font-size: var(--font-size-sm);
+}
+
+.text-base {
+  font-size: var(--font-size-base);
+}
+
+.text-lg {
+  font-size: var(--font-size-lg);
+}
+
+.text-xl {
+  font-size: var(--font-size-xl);
+}
+
+.text-2xl {
+  font-size: var(--font-size-2xl);
+}
+
+.text-3xl {
+  font-size: var(--font-size-3xl);
+}
+
+.text-4xl {
+  font-size: var(--font-size-4xl);
+}
+
+.font-regular {
+  font-weight: var(--font-weight-regular);
+}
+
+.font-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+.font-semibold {
+  font-weight: var(--font-weight-semibold);
+}
+
+.font-bold {
+  font-weight: var(--font-weight-bold);
+}
+
+// Icon size utilities
+.icon-sm {
+  width: var(--icon-size-sm);
+  height: var(--icon-size-sm);
+}
+
+.icon-md {
+  width: var(--icon-size-md);
+  height: var(--icon-size-md);
+}
+
+.icon-lg {
+  width: var(--icon-size-lg);
+  height: var(--icon-size-lg);
+}
+
+.icon-xl {
+  width: var(--icon-size-xl);
+  height: var(--icon-size-xl);
 }

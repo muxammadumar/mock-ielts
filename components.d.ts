@@ -7,7 +7,15 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    EvaluationSlide: typeof import('./src/components/onboarding/EvaluationSlide.vue')['default']
+    Icon: typeof import('./src/components/common/Icon.vue')['default']
+    Loading: typeof import('./src/components/common/Loading.vue')['default']
+    Navbar: typeof import('./src/components/layout/Navbar.vue')['default']
+    ProgressSlide: typeof import('./src/components/onboarding/ProgressSlide.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    VanSwipe: typeof import('vant/es')['Swipe']
+    VanSwipeItem: typeof import('vant/es')['SwipeItem']
+    WelcomeSlide: typeof import('./src/components/onboarding/WelcomeSlide.vue')['default']
   }
 }

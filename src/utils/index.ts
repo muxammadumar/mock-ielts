@@ -6,10 +6,7 @@ export const formatDate = (date: Date | string | number, format = 'YYYY-MM-DD'):
   const month = String(d.getMonth() + 1).padStart(2, '0')
   const day = String(d.getDate()).padStart(2, '0')
 
-  return format
-    .replace('YYYY', String(year))
-    .replace('MM', month)
-    .replace('DD', day)
+  return format.replace('YYYY', String(year)).replace('MM', month).replace('DD', day)
 }
 
 export const debounce = <T extends (...args: unknown[]) => unknown>(

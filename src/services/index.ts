@@ -12,7 +12,7 @@ const createAxiosInstance = (config?: AxiosRequestConfig): AxiosInstance => {
 
   // Request interceptor
   instance.interceptors.request.use(
-    (config) => {
+    config => {
       // Add auth token if available
       // const token = getAuthToken()
       // if (token) {
@@ -20,17 +20,17 @@ const createAxiosInstance = (config?: AxiosRequestConfig): AxiosInstance => {
       // }
       return config
     },
-    (error) => {
+    error => {
       return Promise.reject(error)
     }
   )
 
   // Response interceptor
   instance.interceptors.response.use(
-    (response) => {
+    response => {
       return response.data
     },
-    (error) => {
+    error => {
       // Handle error globally
       if (error.response) {
         // Server responded with error status
