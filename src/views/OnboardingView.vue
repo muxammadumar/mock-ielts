@@ -95,16 +95,27 @@ const handleContinue = () => {
 }
 
 .onboarding-swipe {
-  flex: 1;
   width: 100%;
+  padding-top: 60px;
+  padding-bottom: 120px;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .continue-button-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   padding: 20px;
   padding-bottom: 48px;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 100;
+  background: linear-gradient(180deg, transparent 0%, #a175f0 20%);
 }
 
 .continue-button {

@@ -28,10 +28,11 @@ withDefaults(defineProps<Props>(), {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100%;
+  justify-content: flex-start;
+  min-height: fit-content;
   padding: 20px;
-  padding-top: 165px;
+  padding-top: 60px;
+  padding-bottom: 40px;
   text-align: center;
 }
 
