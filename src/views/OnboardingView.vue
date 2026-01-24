@@ -14,6 +14,7 @@
       :show-indicators="false"
       class="onboarding-swipe"
       @change="handleSlideChange"
+      @click="handleSlideClick"
     >
       <van-swipe-item>
         <WelcomeSlide :is-active="currentSlide === 0" />
@@ -27,7 +28,7 @@
     </van-swipe>
 
     <div class="continue-button-container">
-      <button class="continue-button" @click="handleContinue">
+      <button class="continue-button" @click.stop="handleContinue">
         {{ $t(`onboarding.slide${currentSlide + 1}.button`) }}
       </button>
     </div>
@@ -49,6 +50,44 @@ const handleSlideChange = (index: number) => {
   currentSlide.value = index
 }
 
+const goToNext = () => {
+  if (currentSlide.value < 2) {
+    currentSlide.value++
+    swipeRef.value?.swipeTo(currentSlide.value)
+  } else {
+    router.push('/home')
+  }
+}
+
+const goToPrevious = () => {
+  if (currentSlide.value > 0) {
+    currentSlide.value--
+    swipeRef.value?.swipeTo(currentSlide.value)
+  }
+}
+
+const handleSlideClick = (e: MouseEvent) => {
+  const target = e.target as HTMLElement
+  const container = e.currentTarget as HTMLElement
+  
+  // Don't handle clicks on interactive elements
+  if (target.closest('.continue-button-container') || target.closest('button')) {
+    return
+  }
+  
+  const containerWidth = container.clientWidth
+  const clickX = e.clientX - container.getBoundingClientRect().left
+  const clickPercentage = (clickX / containerWidth) * 100
+  
+  if (clickPercentage > 50) {
+    // Right side clicked - go to next
+    goToNext()
+  } else {
+    // Left side clicked - go to previous
+    goToPrevious()
+  }
+}
+
 const handleContinue = () => {
   if (currentSlide.value < 2) {
     currentSlide.value++
@@ -62,7 +101,7 @@ const handleContinue = () => {
 <style scoped lang="scss">
 .onboarding-view {
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   background: linear-gradient(180deg, #a175f0 0%, #be9ef8 100%);
@@ -74,9 +113,10 @@ const handleContinue = () => {
   display: flex;
   gap: 8px;
   padding: 15px;
+  padding-top: calc(15px + env(safe-area-inset-top, 0px));
   justify-content: center;
   position: absolute;
-  top: 10px;
+  top: 0;
   left: 0;
   right: 0;
   z-index: 10;
@@ -98,10 +138,9 @@ const handleContinue = () => {
   width: 100%;
   padding-top: 60px;
   padding-bottom: 120px;
-  height: calc(100vh - 120px);
-  overflow-y: auto;
+  height: calc(100dvh - 120px);
+  overflow-y: hidden;
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
 }
 
 .continue-button-container {
@@ -110,7 +149,7 @@ const handleContinue = () => {
   left: 0;
   right: 0;
   padding: 20px;
-  padding-bottom: 48px;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   display: flex;
   justify-content: center;
   align-items: center;

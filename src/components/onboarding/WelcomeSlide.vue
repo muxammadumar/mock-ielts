@@ -62,7 +62,9 @@ withDefaults(defineProps<Props>(), {
   height: auto;
   opacity: 0;
   transform: translateY(100px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 
   &.animate-in {
     opacity: 1;

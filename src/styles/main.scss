@@ -1,4 +1,4 @@
-@import './variables.scss';
+@use './variables.scss';
 
 * {
   margin: 0;
@@ -9,7 +9,7 @@
 html,
 body {
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   overflow: hidden;
   position: fixed;
   -webkit-font-smoothing: antialiased;
@@ -38,14 +38,11 @@ body {
   line-height: var(--line-height-normal);
   color: var(--color-text-primary);
   background-color: var(--color-background-white);
-  // Support safe area insets
-  padding-top: var(--safe-area-inset-top);
-  padding-bottom: var(--safe-area-inset-bottom);
 }
 
 #app {
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   overflow: hidden;
 }
 

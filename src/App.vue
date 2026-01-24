@@ -10,7 +10,7 @@ import Loading from '@/components/common/Loading.vue'
 <style scoped lang="scss">
 #app {
   width: 100svw;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   position: fixed;
   top: 0;
