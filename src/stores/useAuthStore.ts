@@ -8,10 +8,11 @@ const USER_KEY = 'auth_user'
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref<string | null>(localStorage.getItem(TOKEN_KEY))
-  const user = ref<User | null>(() => {
+  const getInitialUser = (): User | null => {
     const saved = localStorage.getItem(USER_KEY)
     return saved ? JSON.parse(saved) : null
-  })
+  }
+  const user = ref<User | null>(getInitialUser())
 
   const isAuthenticated = computed(() => !!token.value && !!user.value)
 
