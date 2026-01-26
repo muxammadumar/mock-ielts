@@ -55,7 +55,7 @@ const goToNext = () => {
     currentSlide.value++
     swipeRef.value?.swipeTo(currentSlide.value)
   } else {
-    router.push('/home')
+    router.push('/auth/signin')
   }
 }
 
@@ -69,16 +69,16 @@ const goToPrevious = () => {
 const handleSlideClick = (e: MouseEvent) => {
   const target = e.target as HTMLElement
   const container = e.currentTarget as HTMLElement
-  
+
   // Don't handle clicks on interactive elements
   if (target.closest('.continue-button-container') || target.closest('button')) {
     return
   }
-  
+
   const containerWidth = container.clientWidth
   const clickX = e.clientX - container.getBoundingClientRect().left
   const clickPercentage = (clickX / containerWidth) * 100
-  
+
   if (clickPercentage > 50) {
     // Right side clicked - go to next
     goToNext()
@@ -93,7 +93,7 @@ const handleContinue = () => {
     currentSlide.value++
     swipeRef.value?.swipeTo(currentSlide.value)
   } else {
-    router.push('/home')
+    router.push('/auth/signin')
   }
 }
 </script>
@@ -137,7 +137,7 @@ const handleContinue = () => {
 .onboarding-swipe {
   width: 100%;
   padding-top: 60px;
-  padding-bottom: 120px;
+  padding-bottom: 100px;
   height: calc(100dvh - 120px);
   overflow-y: hidden;
   overflow-x: hidden;
@@ -154,7 +154,7 @@ const handleContinue = () => {
   justify-content: center;
   align-items: center;
   z-index: 100;
-  background: linear-gradient(180deg, transparent 0%, #a175f0 20%);
+  background: linear-gradient(180deg, rgba(197, 169, 248, 0) 0%, #c5a9f8 33.78%);
 }
 
 .continue-button {

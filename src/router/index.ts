@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import type { Router } from 'vue-router'
+import type { Router, RouteLocationNormalized } from 'vue-router'
 import { useAppStore } from '@/stores/useAppStore'
+import { useAuthStore } from '@/stores/useAuthStore'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -9,6 +10,7 @@ const router = createRouter({
       path: '/',
       name: 'onboarding',
       component: () => import('@/layout/onboarding.vue'),
+      meta: { requiresAuth: false },
       children: [
         {
           path: '',
@@ -18,9 +20,33 @@ const router = createRouter({
       ],
     },
     {
+      path: '/auth',
+      name: 'auth',
+      component: () => import('@/layout/auth.vue'),
+      meta: { requiresAuth: false },
+      children: [
+        {
+          path: 'signin',
+          name: 'signin',
+          component: () => import('@/views/auth/SignInView.vue'),
+        },
+        {
+          path: 'signup',
+          name: 'signup',
+          component: () => import('@/views/auth/SignUpView.vue'),
+        },
+        {
+          path: 'otp',
+          name: 'otp',
+          component: () => import('@/views/auth/OtpView.vue'),
+        },
+      ],
+    },
+    {
       path: '/home',
       name: 'main',
       component: () => import('@/layout/main.vue'),
+      meta: { requiresAuth: true },
       children: [
         {
           path: '',
@@ -53,6 +79,28 @@ export const setupLoadingGuards = (routerInstance: Router) => {
     setTimeout(() => {
       appStore.hide()
     }, 300)
+  })
+}
+
+export const setupAuthGuards = (routerInstance: Router) => {
+  routerInstance.beforeEach((to: RouteLocationNormalized) => {
+    const authStore = useAuthStore()
+    
+    // Check auth status from localStorage
+    authStore.checkAuth()
+
+    const requiresAuth = to.meta.requiresAuth === true
+    const isAuthenticated = authStore.isAuthenticated
+
+    // If route requires auth and user is not authenticated, redirect to sign in
+    if (requiresAuth && !isAuthenticated) {
+      return { name: 'signin', query: { redirect: to.fullPath } }
+    }
+
+    // If user is authenticated and trying to access auth routes, redirect to home
+    if (isAuthenticated && to.matched.some(record => record.path.startsWith('/auth'))) {
+      return { name: 'home' }
+    }
   })
 }
 

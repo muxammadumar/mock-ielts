@@ -1,5 +1,9 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 
+const getAuthToken = (): string | null => {
+  return localStorage.getItem('auth_token')
+}
+
 const createAxiosInstance = (config?: AxiosRequestConfig): AxiosInstance => {
   const instance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
@@ -14,10 +18,10 @@ const createAxiosInstance = (config?: AxiosRequestConfig): AxiosInstance => {
   instance.interceptors.request.use(
     config => {
       // Add auth token if available
-      // const token = getAuthToken()
-      // if (token) {
-      //   config.headers.Authorization = `Bearer ${token}`
-      // }
+      const token = getAuthToken()
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`
+      }
       return config
     },
     error => {

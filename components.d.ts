@@ -7,6 +7,8 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    CustomNumericKeypad: typeof import('./src/components/auth/CustomNumericKeypad.vue')['default']
+    CustomOtpInput: typeof import('./src/components/auth/CustomOtpInput.vue')['default']
     EvaluationSlide: typeof import('./src/components/onboarding/EvaluationSlide.vue')['default']
     Icon: typeof import('./src/components/common/Icon.vue')['default']
     Loading: typeof import('./src/components/common/Loading.vue')['default']
