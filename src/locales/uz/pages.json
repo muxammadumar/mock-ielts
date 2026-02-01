@@ -1,6 +1,15 @@
 {
   "home": {
-    "title": "Bosh sahifa"
+    "title": "Bosh sahifa",
+    "greeting": "Salom",
+    "progressOverview": "JARAYONNI KO'RISH",
+    "scoreBand": "Ball",
+    "aiFeedback": "AI SHARH",
+    "recommendations": "Yaxshilash uchun tavsiyalar",
+    "listening": "TINGLASH",
+    "reading": "O'QISH",
+    "writing": "YOZISH",
+    "speaking": "GAPIRISH"
   },
   "mockTest": {
     "title": "Test sinovi"

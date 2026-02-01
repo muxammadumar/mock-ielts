@@ -46,7 +46,8 @@ const router = createRouter({
       path: '/home',
       name: 'main',
       component: () => import('@/layout/main.vue'),
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
+      // meta: { requiresAuth: true },
       children: [
         {
           path: '',
@@ -85,7 +86,7 @@ export const setupLoadingGuards = (routerInstance: Router) => {
 export const setupAuthGuards = (routerInstance: Router) => {
   routerInstance.beforeEach((to: RouteLocationNormalized) => {
     const authStore = useAuthStore()
-    
+
     // Check auth status from localStorage
     authStore.checkAuth()
 

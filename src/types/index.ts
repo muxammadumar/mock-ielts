@@ -20,3 +20,5 @@ export interface PaginationResponse<T> {
   page: number
   pageSize: number
 }
+
+export * from './dashboard'

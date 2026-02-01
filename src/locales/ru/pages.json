@@ -1,6 +1,15 @@
 {
   "home": {
-    "title": "Главная"
+    "title": "Главная",
+    "greeting": "Салом",
+    "progressOverview": "ОБЗОР ПРОГРЕССА",
+    "scoreBand": "Балл",
+    "aiFeedback": "ИИ ОТЗЫВ",
+    "recommendations": "Рекомендации для улучшения",
+    "listening": "АУДИРОВАНИЕ",
+    "reading": "ЧТЕНИЕ",
+    "writing": "ПИСЬМО",
+    "speaking": "ГОВОРЕНИЕ"
   },
   "mockTest": {
     "title": "Пробный тест"
