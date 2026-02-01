@@ -1,7 +1,7 @@
 <template>
   <div class="skill-score-card">
-    <div class="skill-score-card__icon-wrapper" :style="{ backgroundColor: color }">
-      <Icon :name="icon" size="24px" color="#ffffff" />
+    <div class="skill-score-card__icon-wrapper">
+      <Icon :name="icon" size="40px" />
     </div>
     <div class="skill-score-card__content">
       <div class="skill-score-card__label">{{ name }}</div>
@@ -26,18 +26,14 @@ defineProps<Props>()
 <style scoped lang="scss">
 .skill-score-card {
   background-color: var(--color-background-white);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-md);
-  box-shadow: var(--shadow-md);
+  border-radius: 24px;
+  padding: 16px;
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  min-height: 120px;
+  gap: 12px;
 
   &__icon-wrapper {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,18 +47,18 @@ defineProps<Props>()
   }
 
   &__label {
-    font-size: var(--font-size-xs);
+    font-size: 12px;
     font-weight: var(--font-weight-medium);
     color: var(--color-text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    line-height: 12px;
   }
 
   &__score {
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary-black);
-    line-height: var(--line-height-tight);
+    font-size: 18px;
+    font-weight: bold;
+    color: #171717;
+    line-height: 24px;
   }
 }
 </style>

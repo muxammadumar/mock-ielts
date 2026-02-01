@@ -16,7 +16,7 @@
       <div class="user-header__name">{{ fullName }}</div>
     </div>
     <div class="user-header__badge">
-      <Icon name="badge" size="20px" color="#FFD700" />
+      <Icon name="rank-badge" size="20px" />
       <span class="user-header__points">{{ props.points }}</span>
     </div>
   </div>
@@ -60,18 +60,12 @@ const initials = computed(() => {
 .user-header {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-md) var(--spacing-lg);
-  background: linear-gradient(
-    180deg,
-    var(--color-primary-light) 0%,
-    rgba(161, 117, 240, 0.3) 100%
-  );
-  padding-top: calc(var(--safe-area-inset-top) + var(--spacing-md));
+  gap: 12px;
+  padding: 12px 16px;
 
   &__avatar {
-    width: 56px;
-    height: 56px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
@@ -103,28 +97,28 @@ const initials = computed(() => {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 2px;
   }
 
   &__greeting {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-regular);
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    color: #ffffff;
+    line-height: 22px;
   }
 
   &__name {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary-white);
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 22px;
   }
 
   &__badge {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     background-color: var(--color-background-white);
-    padding: 8px 12px;
-    border-radius: var(--border-radius-md);
+    padding: 12px;
+    border-radius: 12px;
     box-shadow: var(--shadow-sm);
     flex-shrink: 0;
   }

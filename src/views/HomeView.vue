@@ -41,18 +41,17 @@ onMounted(() => {
 .home-view {
   width: 100%;
   min-height: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(224, 187, 228, 0.3) 0%,
-    rgba(243, 236, 248, 0.5) 100%
-  );
+  background-image: url('@/assets/images/home-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
 
   &__content {
     flex: 1;
-    padding: var(--spacing-md);
-    padding-bottom: calc(var(--spacing-md) + 80px); // Space for navbar
+    padding: 12px 16px;
+    padding-bottom: calc(12px + 80px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -60,8 +59,8 @@ onMounted(() => {
   &__skills-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
+    gap: 12px;
+    margin-bottom: 16px;
   }
 }
 </style>

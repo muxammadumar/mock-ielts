@@ -1,7 +1,7 @@
 <template>
   <div class="ai-feedback-card" @click="handleClick">
     <div class="ai-feedback-card__icon-wrapper">
-      <Icon name="star" size="24px" color="#ffffff" />
+      <Icon name="recommendation-icon" size="40px" />
     </div>
     <div class="ai-feedback-card__content">
       <div class="ai-feedback-card__label">{{ $t('pages.home.aiFeedback') }}</div>
@@ -26,14 +26,15 @@ const handleClick = () => {
 <style scoped lang="scss">
 .ai-feedback-card {
   background-color: var(--color-background-white);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-md);
-  box-shadow: var(--shadow-md);
+  border-radius: 24px;
+  padding: 16px;
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:active {
     transform: scale(0.98);
@@ -41,10 +42,8 @@ const handleClick = () => {
   }
 
   &__icon-wrapper {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background-color: var(--color-primary-light);
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -59,18 +58,18 @@ const handleClick = () => {
   }
 
   &__label {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: medium;
+    color: #5c5c5c;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    line-height: 12px;
   }
 
   &__subtitle {
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary-black);
-    line-height: var(--line-height-normal);
+    font-size: 16px;
+    font-weight: bold;
+    color: #171717;
+    line-height: 24px;
   }
 
   &__chevron {

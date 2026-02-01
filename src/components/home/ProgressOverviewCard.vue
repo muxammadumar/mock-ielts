@@ -2,7 +2,7 @@
   <div class="progress-overview-card">
     <div class="progress-overview-card__header">
       <div class="progress-overview-card__icon-wrapper">
-        <Icon name="clock" size="20px" color="#ffffff" />
+        <Icon name="progress-clock" size="40px" />
       </div>
       <div class="progress-overview-card__title-section">
         <div class="progress-overview-card__label">{{ $t('pages.home.progressOverview') }}</div>
@@ -40,23 +40,20 @@ const handleTimeRangeSelect = (range: TimeRange) => {
 <style scoped lang="scss">
 .progress-overview-card {
   background-color: var(--color-background-white);
-  border-radius: var(--border-radius-lg);
-  padding: var(--spacing-md);
-  box-shadow: var(--shadow-lg);
-  margin-bottom: var(--spacing-md);
+  border-radius: 32px;
+  padding: 20px;
+  margin-bottom: 16px;
 
   &__header {
     display: flex;
     align-items: flex-start;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
+    gap: 10px;
+    margin-bottom: 20px;
   }
 
   &__icon-wrapper {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
-    background-color: var(--color-primary-light);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -71,18 +68,19 @@ const handleTimeRangeSelect = (range: TimeRange) => {
   }
 
   &__label {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-secondary);
+    font-size: 12px;
+    font-weight: medium;
+    color: #5c5c5c;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 2%;
+    line-height: 12px;
   }
 
   &__date-score {
-    font-size: var(--font-size-lg);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary-black);
-    line-height: var(--line-height-tight);
+    font-size: 18px;
+    font-weight: bold;
+    color: #171717;
+    line-height: 24px;
   }
 }
 </style>
