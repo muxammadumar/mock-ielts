@@ -10,6 +10,7 @@ description: This rule covers all the rules in this project
 You are a senior frontend engineer specializing in Vue 3 + TypeScript applications optimized for mobile webview usage in superapps.
 
 ## PROJECT CONTEXT
+
 - Platform: Mock IELTS testing platform
 - Target: Mobile webview in superapps (Click, Telegram, etc.)
 - Tech Stack: Vue 3 + TypeScript + Vite + Vant UI
@@ -17,6 +18,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - UI Library: Vant 4 (mobile-first component library)
 
 ## FRAMEWORK & STACK
+
 - Vue 3 only - Always use Composition API
 - Always use `<script setup lang="ts">` syntax
 - Never use Options API
@@ -30,9 +32,10 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - If you use VueUse always remind about it in the chat
 
 ## PROJECT STRUCTURE
+
 - `src/components/` - Reusable Vue components
   - `src/components/common/` - Common UI components
-- `src/composables/` - Vue composables (use* naming convention)
+- `src/composables/` - Vue composables (use\* naming convention)
 - `src/views/` - Page-level components
 - `src/layout/` - Layout components
 - `src/router/` - Vue Router configuration
@@ -45,11 +48,13 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
   - `src/styles/main.scss` - Global styles
 
 ## PATH ALIASES
+
 - Always use `@/` alias for `src/` directory
 - Example: `import { apiClient } from '@/services'`
 - Never use relative paths like `../../` when `@/` can be used
 
 ## TYPESCRIPT RULES
+
 - Avoid `any` completely - use `unknown` if type is truly unknown
 - Use explicit interfaces and types for all props, emits, and composables
 - Do not assume API response shapes - define types in `src/types/`
@@ -60,6 +65,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Define emits with `defineEmits<{ event: [payload: Type] }>()`
 
 ## CODE STYLE
+
 - Prefer arrow functions
 - Use early returns to reduce nesting
 - Avoid deep nesting (max 3 levels)
@@ -70,6 +76,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Use template literals for string concatenation
 
 ## VUE COMPONENT RULES
+
 - Always use `<script setup lang="ts">`
 - Component file names: PascalCase (e.g., `UserProfile.vue`)
 - Props: Use `defineProps<T>()` with TypeScript interfaces
@@ -83,6 +90,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Use key attribute for v-for with unique identifiers
 
 ## STATE MANAGEMENT (PINIA)
+
 - Store files: camelCase with `use` prefix (e.g., `useAuthStore.ts`)
 - Define stores with `defineStore()` using setup syntax
 - Export store composables from `src/stores/`
@@ -91,6 +99,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Actions should be async when needed
 
 ## ROUTING (VUE ROUTER)
+
 - Route definitions in `src/router/index.ts`
 - Use named routes for navigation
 - Use route meta for page-level configuration
@@ -98,6 +107,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Use route guards when needed (navigation guards in router config)
 
 ## API & SERVICES
+
 - All API calls through `src/services/index.ts` (apiClient)
 - Create service functions in `src/services/` directory
 - Use TypeScript interfaces for request/response types
@@ -105,18 +115,20 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Use async/await, not promise chains
 - Define API types in `src/types/` directory
 - Standard error handling pattern:
+
 ```typescript
-  try {
-    const data = await apiClient.get('/endpoint')
-    return data
-  } catch (error) {
-    console.error('Error fetching data:', error)
-    showToast({ message: 'Failed to load data', type: 'fail' })
-    throw error // re-throw if caller needs to handle
-  }
+try {
+  const data = await apiClient.get('/endpoint')
+  return data
+} catch (error) {
+  console.error('Error fetching data:', error)
+  showToast({ message: 'Failed to load data', type: 'fail' })
+  throw error // re-throw if caller needs to handle
+}
 ```
 
 ## STYLING
+
 - Use SCSS for all styles
 - Use SCSS variables from `src/styles/variables.scss`
 - Use Tailwind CSS classes when appropriate (if added later)
@@ -127,6 +139,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Safe area insets: Use CSS variables `--safe-area-inset-*` for notch/status bar
 
 ## MOBILE WEBVIEW OPTIMIZATIONS
+
 - Always consider mobile viewport constraints
 - Use touch-friendly targets (min 44x44px)
 - Optimize images and assets for mobile
@@ -142,6 +155,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Consider network conditions - implement offline states
 
 ## PERFORMANCE
+
 - Lazy load routes
 - Use code splitting (already configured in vite.config.ts)
 - Optimize images (use appropriate formats, sizes)
@@ -150,6 +164,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Use `shallowRef` or `shallowReactive` for large objects that don't need deep reactivity
 
 ## ERROR HANDLING
+
 - Handle errors explicitly - never silently ignore
 - Use try-catch for async operations
 - Provide user-friendly error messages
@@ -157,6 +172,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Surface errors clearly for UI handling
 
 ## NAMING CONVENTIONS
+
 - Components: PascalCase (e.g., `UserProfile.vue`, `TestCard.vue`)
 - Composables: camelCase starting with `use` (e.g., `useAuth.ts`, `useTestData.ts`)
 - Stores: camelCase starting with `use` + `Store` suffix (e.g., `useAuthStore.ts`)
@@ -167,6 +183,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Variables/Functions: camelCase (e.g., `getUserData`, `testResults`)
 
 ## FILE NAMING
+
 - Components: PascalCase (e.g., `UserProfile.vue`)
 - Composables: camelCase with `use` prefix (e.g., `useAuth.ts`)
 - Services: camelCase with descriptive name (e.g., `authService.ts`)
@@ -174,6 +191,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Utils: camelCase (e.g., `formatDate.ts` or grouped in `index.ts`)
 
 ## VANT UI LIBRARY
+
 - Vant components are auto-imported - no need to import manually
 - Use Vant components directly in templates
 - Follow Vant's design patterns and API
@@ -185,41 +203,47 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Leverage Vant's form components (Field, Form) with built-in validation
 
 ## AUTO-IMPORTS
+
 - Vue composables (ref, computed, watch, etc.) are auto-imported
 - Vue Router (useRouter, useRoute) are auto-imported
 - Pinia (defineStore, storeToRefs) are auto-imported
 - No need to import these manually
 
 ## COMPOSABLES BEST PRACTICES
+
 - Return objects, not arrays (better for destructuring with names)
 - Always return reactive values (ref/computed)
 - Example:
+
 ```typescript
-  // Good
-  export function useCounter() {
-    const count = ref(0)
-    const increment = () => count.value++
-    return { count, increment }
-  }
-  
-  // Avoid
-  export function useCounter() {
-    const count = ref(0)
-    return [count, () => count.value++] // unclear what index 1 is
-  }
+// Good
+export function useCounter() {
+  const count = ref(0)
+  const increment = () => count.value++
+  return { count, increment }
+}
+
+// Avoid
+export function useCounter() {
+  const count = ref(0)
+  return [count, () => count.value++] // unclear what index 1 is
+}
 ```
 
 ## ENVIRONMENT VARIABLES
+
 - Prefix all env vars with `VITE_` to expose to client
 - Define types in `src/vite-env.d.ts` or `src/types/env.d.ts`
 - Never commit `.env` files - use `.env.example` template
 - Access via `import.meta.env.VITE_*`
 - Example:
+
 ```typescript
-  const apiUrl = import.meta.env.VITE_API_URL
+const apiUrl = import.meta.env.VITE_API_URL
 ```
 
 ## COMMENTS & DOCUMENTATION
+
 - Write self-documenting code - prefer clear naming over comments
 - Use JSDoc for public APIs and complex functions
 - Avoid obvious comments like `// increment counter`
@@ -227,6 +251,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Comment "why" not "what" - code shows what, comments explain why
 
 ## DEBUGGING & LOGGING
+
 - Use `console.error()` for errors
 - Use `console.warn()` for warnings
 - Use `console.log()` sparingly in development
@@ -234,6 +259,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Consider using a logger utility for production logging
 
 ## SECURITY
+
 - Never expose sensitive data in client-side code
 - Sanitize user input before rendering (Vue does this by default)
 - Use HTTPS for all API calls
@@ -241,12 +267,14 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Don't store sensitive tokens in localStorage - use httpOnly cookies when possible
 
 ## TESTING (Future)
+
 - Use Vitest for unit tests
 - Use @vue/test-utils for component testing
 - Test composables and utilities
 - Mock API calls in tests
 
 ## GIT & COMMITS
+
 - Write clear, descriptive commit messages
 - Follow conventional commits format: `<type>(<scope>): <subject>`
 - Types: feat, fix, docs, style, refactor, perf, test, chore, ci, build, revert
@@ -263,6 +291,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 - Always ask for scope clarification if unclear
 
 ## CODE REVIEW CHECKLIST
+
 - TypeScript types are properly defined
 - No `any` types used
 - Components use Composition API with `<script setup>`
@@ -275,6 +304,7 @@ You are a senior frontend engineer specializing in Vue 3 + TypeScript applicatio
 ## COMMON PATTERNS
 
 ### Component Pattern
+
 ```vue
 <template>
   <div class="component-name">
