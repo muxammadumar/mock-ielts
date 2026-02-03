@@ -1,5 +1,8 @@
 // Global type definitions
 
+export type Locale = 'en' | 'uz' | 'ru'
+export type Theme = 'light' | 'dark'
+
 export interface ApiResponse<T = unknown> {
   code: number
   message: string
@@ -17,3 +20,5 @@ export interface PaginationResponse<T> {
   page: number
   pageSize: number
 }
+
+export * from './dashboard'

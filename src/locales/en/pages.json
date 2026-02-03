@@ -1,0 +1,20 @@
+{
+  "home": {
+    "title": "Home",
+    "greeting": "Salom",
+    "progressOverview": "PROGRESS OVERVIEW",
+    "scoreBand": "Score Band",
+    "aiFeedback": "AI FEEDBACK",
+    "recommendations": "Recommendations to improve",
+    "listening": "LISTENING",
+    "reading": "READING",
+    "writing": "WRITING",
+    "speaking": "SPEAKING"
+  },
+  "mockTest": {
+    "title": "Mock Test"
+  },
+  "settings": {
+    "title": "Settings"
+  }
+}

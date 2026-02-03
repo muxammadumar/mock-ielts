@@ -1,0 +1,19 @@
+{
+  "slide1": {
+    "title": "LingvAI ga <br/> Xush Kelibsiz!",
+    "description": "Reading, Listening, Speaking va Writing ko'nikmalaringizni IELTS kabi sinab koʻring.",
+    "button": "Davom etish"
+  },
+  "slide2": {
+    "title": "Darajangizni Aniq Baholang",
+    "description": "Natijangizni 9 ballik tizimda xolis baholang — va darajangizni oshirish uchun tavsiyalar oling.",
+    "aiFeedbackTitle": "AI FEEDBACK",
+    "aiFeedbackSubtitle": "Recommendations to improve",
+    "button": "Davom etish"
+  },
+  "slide3": {
+    "title": "Progressingizni muntazam kuzating",
+    "description": "Oʻsishingizni kuzating va IELTS imtihonida istalgan natijaga tezroq erishing.",
+    "button": "Davom etish"
+  }
+}
