@@ -41,16 +41,20 @@ const authStore = useAuthStore()
 
 const fullName = computed(() => {
   if (authStore.user) {
-    return `${authStore.user.firstName} ${authStore.user.lastName}`
+    return authStore.user.fullName
   }
   return 'Salima Karimova' // Fallback for demo
 })
 
 const initials = computed(() => {
-  if (authStore.user) {
-    const first = authStore.user.firstName.charAt(0).toUpperCase()
-    const last = authStore.user.lastName.charAt(0).toUpperCase()
-    return `${first}${last}`
+  if (authStore.user?.fullName) {
+    const names = authStore.user.fullName.split(' ')
+    if (names.length >= 2) {
+      return `${names[0].charAt(0).toUpperCase()}${names[names.length - 1].charAt(0).toUpperCase()}`
+    }
+    if (names.length === 1) {
+      return names[0].charAt(0).toUpperCase()
+    }
   }
   return 'SK'
 })

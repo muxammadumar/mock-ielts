@@ -1,7 +1,7 @@
 <template>
   <div class="otp-input">
     <input
-      v-for="(_, index) in 5"
+      v-for="(_, index) in 6"
       :key="index"
       ref="inputRefs"
       v-model="values[index]"
@@ -39,14 +39,14 @@ const emit = defineEmits<{
   complete: [value: string]
 }>()
 
-const values = ref<string[]>(['', '', '', '', ''])
+const values = ref<string[]>(['', '', '', '', '', ''])
 const activeIndex = ref(-1)
 const inputRefs = ref<(HTMLInputElement | null)[]>([])
 
 const updateModelValue = () => {
   const code = values.value.join('')
   emit('update:modelValue', code)
-  if (code.length === 5) {
+  if (code.length === 6) {
     emit('complete', code)
   }
 }
@@ -54,13 +54,13 @@ const updateModelValue = () => {
 const handleInput = (index: number, event: Event) => {
   const target = event.target as HTMLInputElement
   const value = target.value.replace(/[^0-9]/g, '')
-  
+
   if (value) {
     values.value[index] = value
     updateModelValue()
-    
+
     // Move to next field
-    if (index < 4) {
+    if (index < 5) {
       nextTick(() => {
         inputRefs.value[index + 1]?.focus()
       })
@@ -74,17 +74,17 @@ const handleInput = (index: number, event: Event) => {
 const handlePaste = (event: ClipboardEvent) => {
   event.preventDefault()
   const pastedData = event.clipboardData?.getData('text') || ''
-  const digits = pastedData.replace(/[^0-9]/g, '').slice(0, 5)
-  
-  for (let i = 0; i < 5; i++) {
+  const digits = pastedData.replace(/[^0-9]/g, '').slice(0, 6)
+
+  for (let i = 0; i < 6; i++) {
     values.value[i] = digits[i] || ''
   }
-  
+
   updateModelValue()
-  
+
   // Focus the last filled field or first empty field
   const lastFilledIndex = digits.length - 1
-  const focusIndex = lastFilledIndex < 4 ? lastFilledIndex + 1 : 4
+  const focusIndex = lastFilledIndex < 5 ? lastFilledIndex + 1 : 5
   nextTick(() => {
     inputRefs.value[focusIndex]?.focus()
   })
@@ -106,7 +106,7 @@ const focus = () => {
 }
 
 const clear = () => {
-  values.value = ['', '', '', '', '']
+  values.value = ['', '', '', '', '', '']
   updateModelValue()
   focus()
 }
@@ -115,8 +115,8 @@ watch(
   () => props.modelValue,
   (newValue) => {
     if (newValue !== values.value.join('')) {
-      const digits = newValue.replace(/[^0-9]/g, '').slice(0, 5)
-      for (let i = 0; i < 5; i++) {
+      const digits = newValue.replace(/[^0-9]/g, '').slice(0, 6)
+      for (let i = 0; i < 6; i++) {
         values.value[i] = digits[i] || ''
       }
     }
@@ -145,7 +145,7 @@ defineExpose({
 <style scoped lang="scss">
 .otp-input {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -153,7 +153,7 @@ defineExpose({
 }
 
 .otp-field {
-  width: 56px;
+  width: 48px;
   height: 56px;
   border: 1px solid #ebedf0;
   border-radius: 12px;

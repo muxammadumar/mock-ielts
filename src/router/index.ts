@@ -43,14 +43,14 @@ const router = createRouter({
       ],
     },
     {
-      path: '/home',
+      path: '/',
       name: 'main',
       component: () => import('@/layout/main.vue'),
       meta: { requiresAuth: false },
       // meta: { requiresAuth: true },
       children: [
         {
-          path: '',
+          path: 'home',
           name: 'home',
           component: () => import('@/views/HomeView.vue'),
         },
@@ -63,6 +63,21 @@ const router = createRouter({
           path: 'settings',
           name: 'settings',
           component: () => import('@/views/SettingsView.vue'),
+        },
+        {
+          path: 'listening-intro',
+          name: 'listening-intro',
+          component: () => import('@/views/ListeningIntroView.vue'),
+        },
+        {
+          path: 'listening-test',
+          name: 'listening-test',
+          component: () => import('@/views/ListeningTestView.vue'),
+        },
+        {
+          path: 'listening-results',
+          name: 'listening-results',
+          component: () => import('@/views/ListeningResultsView.vue'),
         },
       ],
     },

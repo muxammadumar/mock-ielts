@@ -19,62 +19,36 @@ export const useAuthStore = defineStore('auth', () => {
   const refreshToken = ref<string | null>(localStorage.getItem(REFRESH_TOKEN_KEY))
   const getInitialUser = (): User | null => {
     const saved = localStorage.getItem(USER_KEY)
-    return saved ? JSON.parse(saved) : null
+    if (!saved || saved === 'undefined' || saved === 'null') {
+      return null
+    }
+    try {
+      return JSON.parse(saved)
+    } catch (error) {
+      console.error('Failed to parse user from localStorage:', error)
+      return null
+    }
   }
   const user = ref<User | null>(getInitialUser())
 
   const isAuthenticated = computed(() => !!token.value && !!user.value)
 
   /**
-   * Extract user data from AuthResponse (handles different response formats)
-   */
-  const extractUser = (response: AuthResponse): User => {
-    // If user object is provided directly
-    if (response.user) {
-      return response.user
-    }
-    // If user fields are at root level
-    if (response.id && response.firstName && response.lastName) {
-      return {
-        id: response.id,
-        firstName: response.firstName,
-        lastName: response.lastName,
-        phone: response.phone || '',
-        email: response.email,
-      }
-    }
-    // Fallback: return current user or create minimal user
-    return user.value || {
-      id: '',
-      firstName: '',
-      lastName: '',
-      phone: '',
-    }
-  }
-
-  /**
-   * Extract access token from AuthResponse (handles different response formats)
-   */
-  const extractAccessToken = (response: AuthResponse): string => {
-    return response.accessToken || response.token || ''
-  }
-
-  /**
    * Set authentication data (tokens and user)
    */
   const setAuth = (authResponse: AuthResponse) => {
-    const accessToken = extractAccessToken(authResponse)
-    const userData = extractUser(authResponse)
+    if (!authResponse.success || !authResponse.data) {
+      throw new Error(authResponse.message || 'Authentication failed')
+    }
+
+    const { accessToken, refreshToken: newRefreshToken, user: userData } = authResponse.data
 
     token.value = accessToken
     user.value = userData
+    refreshToken.value = newRefreshToken
+
     localStorage.setItem(TOKEN_KEY, accessToken)
-
-    if (authResponse.refreshToken) {
-      refreshToken.value = authResponse.refreshToken
-      localStorage.setItem(REFRESH_TOKEN_KEY, authResponse.refreshToken)
-    }
-
+    localStorage.setItem(REFRESH_TOKEN_KEY, newRefreshToken)
     localStorage.setItem(USER_KEY, JSON.stringify(userData))
   }
 
@@ -109,10 +83,10 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   /**
-   * Send OTP code
+   * Resend OTP code
    */
-  const sendOtp = async (request: SendOtpRequest) => {
-    return await authService.sendOtp(request)
+  const resendOtp = async (request: SendOtpRequest) => {
+    return await authService.resendOtp(request)
   }
 
   /**
@@ -155,12 +129,17 @@ export const useAuthStore = defineStore('auth', () => {
     const savedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY)
     const savedUser = localStorage.getItem(USER_KEY)
 
-    if (savedToken && savedUser) {
-      token.value = savedToken
-      if (savedRefreshToken) {
-        refreshToken.value = savedRefreshToken
+    if (savedToken && savedUser && savedUser !== 'undefined' && savedUser !== 'null') {
+      try {
+        token.value = savedToken
+        if (savedRefreshToken && savedRefreshToken !== 'undefined' && savedRefreshToken !== 'null') {
+          refreshToken.value = savedRefreshToken
+        }
+        user.value = JSON.parse(savedUser)
+      } catch (error) {
+        console.error('Failed to restore auth from localStorage:', error)
+        clearAuth()
       }
-      user.value = JSON.parse(savedUser)
     } else {
       clearAuth()
     }
@@ -173,7 +152,7 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     signIn,
     signUp,
-    sendOtp,
+    resendOtp,
     verifyOtp,
     signOut,
     refreshTokens,

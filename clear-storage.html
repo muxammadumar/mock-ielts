@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Auth Storage</title>
+</head>
+<body>
+    <h1>Clearing Authentication Storage...</h1>
+    <pre id="output"></pre>
+    <script>
+        const output = document.getElementById('output');
+        
+        // Clear all auth-related localStorage items
+        const keys = ['auth_token', 'auth_refresh_token', 'auth_user'];
+        
+        keys.forEach(key => {
+            const value = localStorage.getItem(key);
+            output.innerHTML += `Before: ${key} = ${value}\n`;
+            localStorage.removeItem(key);
+            output.innerHTML += `After: ${key} = ${localStorage.getItem(key)}\n\n`;
+        });
+        
+        output.innerHTML += '\n✅ All auth storage cleared!\n';
+        output.innerHTML += '\nYou can close this tab and refresh your app.';
+    </script>
+</body>
+</html>

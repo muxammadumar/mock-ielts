@@ -1,0 +1,1719 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1": {
+      "get": {
+        "operationId": "AppController_getHello_api/v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Health check",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "operationId": "AppController_healthCheck_api/v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "description": "Creates a new user account and returns access and refresh tokens",
+        "operationId": "AuthController_register_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Register new user",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "description": "Authenticates user credentials and returns access and refresh tokens",
+        "operationId": "AuthController_login_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "User login",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "description": "Uses a valid refresh token to generate new tokens",
+        "operationId": "AuthController_refreshTokens_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Refresh tokens",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "description": "Invalidates the current session and refresh tokens",
+        "operationId": "AuthController_logout_api/v1",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Logout",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/email/verify-otp": {
+      "post": {
+        "operationId": "AuthController_verify_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "User verify with send email otp code",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/email/resend-otp": {
+      "post": {
+        "operationId": "AuthController_resend_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "User resend code to gmail",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/sms/verify-otp": {
+      "post": {
+        "operationId": "AuthController_verifySms_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "User verify with SMS otp code",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/sms/resend-otp": {
+      "post": {
+        "operationId": "AuthController_resendSms_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "User resend code to phone via SMS",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/password/forgot": {
+      "post": {
+        "description": "Send password reset OTP code to user email",
+        "operationId": "AuthController_forgotPassword_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Request password reset",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/password/reset": {
+      "post": {
+        "description": "Reset user password with verified OTP code",
+        "operationId": "AuthController_resetPassword_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Reset password",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/google": {
+      "get": {
+        "description": "Initiates Google OAuth authentication flow",
+        "operationId": "AuthController_googleAuth_api/v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Google OAuth Login",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/google/callback": {
+      "get": {
+        "description": "Handles Google OAuth callback and returns tokens",
+        "operationId": "AuthController_googleCallback_api/v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Google OAuth Callback",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "operationId": "UsersController_findAll_api/v1",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (1-based)",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search term",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Sort by field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "default": "desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get all users with pagination",
+        "tags": [
+          "Users"
+        ]
+      },
+      "post": {
+        "operationId": "UsersController_create_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Create new user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "operationId": "UsersController_getProfile_api/v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get current user profile",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/{id}": {
+      "get": {
+        "operationId": "UsersController_findOne_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get user by ID",
+        "tags": [
+          "Users"
+        ]
+      },
+      "put": {
+        "operationId": "UsersController_update_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Update user",
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_remove_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Delete user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/roles": {
+      "post": {
+        "operationId": "RolesController_create_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Role created successfully"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Create a new role",
+        "tags": [
+          "Roles"
+        ]
+      },
+      "get": {
+        "operationId": "RolesController_findAll_api/v1",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number (1-based)",
+            "schema": {
+              "minimum": 1,
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search term",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Sort by field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "default": "desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all roles"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get all roles",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
+    "/api/v1/roles/{id}": {
+      "get": {
+        "operationId": "RolesController_findOne_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role details"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get a role by ID",
+        "tags": [
+          "Roles"
+        ]
+      },
+      "patch": {
+        "operationId": "RolesController_update_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Role updated successfully"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Update a role",
+        "tags": [
+          "Roles"
+        ]
+      },
+      "delete": {
+        "operationId": "RolesController_remove_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role deleted successfully"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Delete a role",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
+    "/api/v1/roles/assign": {
+      "post": {
+        "operationId": "RolesController_assignRoles_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Roles assigned successfully"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Assign roles to a user",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
+    "/api/v1/roles/assign-permissions": {
+      "post": {
+        "operationId": "RolesController_assignPermissionToUser_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignPermissionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Permissions assigned successfully"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Assign permissions to a user",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
+    "/api/v1/roles/{id}/permissions": {
+      "get": {
+        "operationId": "RolesController_listRolesWithPermissions_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of role permissions"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get permissions of a role",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
+    "/api/v1/roles/user/{userId}/roles": {
+      "get": {
+        "operationId": "RolesController_getUserRoles_api/v1",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of user roles"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get roles of a user",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
+    "/api/v1/roles/user/{userId}/permissions": {
+      "get": {
+        "operationId": "RolesController_getUserPermissions_api/v1",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of user permissions"
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get permissions of a user",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
+    "/api/v1/files/upload": {
+      "post": {
+        "operationId": "FilesController_createFile_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Upload a file",
+        "tags": [
+          "Files"
+        ]
+      }
+    },
+    "/api/v1/files/{id}/download": {
+      "get": {
+        "operationId": "FilesController_getFile_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Download a file",
+        "tags": [
+          "Files"
+        ]
+      }
+    },
+    "/api/v1/files/open": {
+      "get": {
+        "operationId": "FilesController_open_api/v1",
+        "parameters": [
+          {
+            "name": "file_id",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "title": "File ID",
+              "type": "string"
+            }
+          },
+          {
+            "name": "download",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "title": "Download or open inline",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Open a file (public)",
+        "tags": [
+          "Files"
+        ]
+      }
+    },
+    "/api/v1/tests": {
+      "get": {
+        "operationId": "TestsController_listPublished_api/v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get published tests",
+        "tags": [
+          "Tests"
+        ]
+      }
+    },
+    "/api/v1/tests/{id}": {
+      "get": {
+        "operationId": "TestsController_getStructure_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get test structure",
+        "tags": [
+          "Tests"
+        ]
+      }
+    },
+    "/api/v1/attempts": {
+      "post": {
+        "operationId": "AttemptsController_startAttempt_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartAttemptDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Start new attempt",
+        "tags": [
+          "Attempts"
+        ]
+      },
+      "get": {
+        "operationId": "AttemptsController_listMyAttempts_api/v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get my attempts",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{id}/answers": {
+      "put": {
+        "operationId": "AttemptsController_upsertAnswers_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertAnswersDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Update answers",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{id}/advance": {
+      "post": {
+        "operationId": "AttemptsController_advance_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Advance to the next section",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{id}/submit": {
+      "post": {
+        "operationId": "AttemptsController_submit_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Submit attempt",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{id}/result": {
+      "get": {
+        "operationId": "AttemptsController_getResult_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "summary": "Get attempt result",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{id}/review": {
+      "get": {
+        "operationId": "AttemptsController_review_api/v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ],
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/scoring-service/score": {
+      "post": {
+        "operationId": "ScoringServiceController_score_api/v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScoreRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "ScoringService"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Invento API",
+    "description": "The Invento API documentation",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authentication management endpoints"
+    },
+    {
+      "name": "Files",
+      "description": "Files management endpoints"
+    },
+    {
+      "name": "Roles",
+      "description": "User roles management endpoints"
+    },
+    {
+      "name": "Users",
+      "description": "User management endpoints"
+    },
+    {
+      "name": "Tests",
+      "description": "Tests management endpoints"
+    },
+    {
+      "name": "Attempts",
+      "description": "Attempts management endpoints"
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "authorization": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Default JWT Authorization",
+        "type": "http",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "example": "998901234567"
+          },
+          "fullName": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          }
+        },
+        "required": [
+          "phone_number",
+          "fullName",
+          "password"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "phone_number": {
+            "type": "string",
+            "example": "998901234567"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          }
+        },
+        "required": [
+          "phone_number",
+          "password"
+        ]
+      },
+      "RefreshTokenDto": {
+        "type": "object",
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "description": "Refresh token"
+          }
+        },
+        "required": [
+          "refresh_token"
+        ]
+      },
+      "VerifyOtpDto": {
+        "type": "object",
+        "properties": {
+          "otp": {
+            "type": "string",
+            "default": "111111"
+          },
+          "code": {
+            "type": "string",
+            "default": "code"
+          }
+        },
+        "required": [
+          "otp",
+          "code"
+        ]
+      },
+      "ResendDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "default": "code"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "ForgotPasswordDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "doston1@gmail.com",
+            "description": "User email address to send reset code"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "ResetPasswordDto": {
+        "type": "object",
+        "properties": {
+          "otp": {
+            "type": "string",
+            "example": "111111",
+            "description": "OTP code received via email"
+          },
+          "code": {
+            "type": "string",
+            "example": "reset_code_123",
+            "description": "Reset code identifier"
+          },
+          "newPassword": {
+            "type": "string",
+            "example": "newPassword123",
+            "description": "New password for the user"
+          }
+        },
+        "required": [
+          "otp",
+          "code",
+          "newPassword"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "doston1@gmail.com",
+            "description": "User email address"
+          },
+          "fullName": {
+            "type": "string",
+            "example": "John",
+            "description": "User first name"
+          },
+          "password": {
+            "type": "string",
+            "example": "dos130230",
+            "description": "User password"
+          }
+        },
+        "required": [
+          "email",
+          "fullName",
+          "password"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "doston1@gmail.com",
+            "description": "User email address"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "CreateRoleDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the role",
+            "example": "teacher"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the role",
+            "example": "Teacher with course management access"
+          },
+          "permissionIds": {
+            "description": "Array of permission IDs to assign to the role",
+            "example": [
+              1,
+              2,
+              3
+            ],
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "UpdateRoleDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the role",
+            "example": "teacher"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the role",
+            "example": "Teacher with course management access"
+          },
+          "permissionIds": {
+            "description": "Array of permission IDs to assign to the role",
+            "example": [
+              1,
+              2,
+              3
+            ],
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "AssignRoleDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "The ID of the user to assign roles to",
+            "example": "095ce76e-54ce-4d31-b6ac-58ddb681c2ea"
+          },
+          "roleIds": {
+            "description": "Array of role IDs to assign to the user",
+            "example": [
+              "840fa042-c8aa-48b7-8ac3-3a687f0c2ef6",
+              "2af127a4-3f88-4bee-8a2f-43abac708cb9"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "userId",
+          "roleIds"
+        ]
+      },
+      "AssignPermissionDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "The ID of the user to assign permissions to",
+            "example": "04e72b98-0afc-4288-980b-3b12f9cb38a3"
+          },
+          "permissionIds": {
+            "description": "Array of permission IDs to assign to the user",
+            "example": [
+              "719f72aa-691a-4197-8b88-5fd896778b32",
+              "228b14eb-980b-4dc6-9cf2-4cb6af6a2b1c",
+              "c39fe12d-1b5b-4248-b6fd-7729c702811a"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "userId",
+          "permissionIds"
+        ]
+      },
+      "StartAttemptDto": {
+        "type": "object",
+        "properties": {
+          "testId": {
+            "type": "string",
+            "description": "Test id"
+          },
+          "random": {
+            "type": "boolean",
+            "description": "Random sections"
+          },
+          "mode": {
+            "type": "string",
+            "description": "Attempt mode"
+          },
+          "requestedSections": {
+            "description": "Requested sections",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "testId",
+          "random",
+          "mode",
+          "requestedSections"
+        ]
+      },
+      "UpsertAnswerItemDto": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "description": "Item id"
+          },
+          "answerText": {
+            "type": "string",
+            "description": "Answer text"
+          },
+          "answerJson": {
+            "type": "object",
+            "description": "Answer json"
+          },
+          "audioFileId": {
+            "type": "string",
+            "description": "Audio file id"
+          }
+        },
+        "required": [
+          "itemId",
+          "answerText",
+          "answerJson",
+          "audioFileId"
+        ]
+      },
+      "WritingItemDto": {
+        "type": "object",
+        "properties": {
+          "taskKey": {
+            "type": "string",
+            "description": "Task key"
+          },
+          "text": {
+            "type": "string",
+            "description": "Text"
+          }
+        },
+        "required": [
+          "taskKey",
+          "text"
+        ]
+      },
+      "UpsertAnswersDto": {
+        "type": "object",
+        "properties": {
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpsertAnswerItemDto"
+            }
+          },
+          "writings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WritingItemDto"
+            }
+          }
+        }
+      },
+      "ScoreRequestDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "ApiResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "statusCode": {
+            "type": "number",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Operation successful"
+          },
+          "data": {
+            "type": "object"
+          },
+          "error": {
+            "type": "object",
+            "example": {
+              "code": "ERROR",
+              "details": "Error details"
+            },
+            "nullable": true
+          },
+          "meta": {
+            "type": "object",
+            "example": {
+              "timestamp": "2024-03-12T12:00:00.000Z",
+              "path": "/api/v1/users",
+              "pagination": {
+                "total": 100,
+                "page": 1,
+                "limit": 10,
+                "lastPage": 10,
+                "prev": null,
+                "next": 2
+              }
+            }
+          }
+        },
+        "required": [
+          "success",
+          "statusCode",
+          "message",
+          "data",
+          "error",
+          "meta"
+        ]
+      }
+    }
+  }
+}
