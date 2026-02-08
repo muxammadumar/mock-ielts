@@ -180,7 +180,6 @@ const handleSubmit = async () => {
   isLoading.value = true
 
   try {
-    // Ensure phone starts with 998
     const phoneNumber = form.value.phone.startsWith('998')
       ? form.value.phone
       : '998' + form.value.phone
@@ -190,13 +189,8 @@ const handleSubmit = async () => {
       password: form.value.password,
     })
 
-    // Navigate to OTP screen
-    router.push({
-      path: '/auth/otp',
-      query: { phone: form.value.phone },
-    })
+    router.push('/home')
   } catch (error) {
-    // Error is handled in the service
   } finally {
     isLoading.value = false
   }

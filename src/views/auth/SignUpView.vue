@@ -16,21 +16,11 @@
       <div class="form">
         <div class="input-wrapper">
           <input
-            v-model="form.firstName"
+            v-model="form.fullName"
             type="text"
-            :placeholder="$t('auth.signUp.firstNamePlaceholder')"
+            :placeholder="$t('auth.signUp.fullNamePlaceholder')"
             class="input-field"
-            :class="{ error: errors.firstName }"
-          />
-        </div>
-
-        <div class="input-wrapper">
-          <input
-            v-model="form.lastName"
-            type="text"
-            :placeholder="$t('auth.signUp.lastNamePlaceholder')"
-            class="input-field"
-            :class="{ error: errors.lastName }"
+            :class="{ error: errors.fullName }"
           />
         </div>
 
@@ -143,20 +133,19 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { formatUzbekPhone, cleanPhoneNumber } from '@/utils'
 import { showToast } from 'vant'
+import Icon from '@/components/common/Icon.vue'
 
 const router = useRouter()
 const authStore = useAuthStore()
 
 const form = ref({
-  firstName: '',
-  lastName: '',
+  fullName: '',
   phone: '',
   password: '',
 })
 
 const errors = ref({
-  firstName: false,
-  lastName: false,
+  fullName: false,
   phone: false,
   password: false,
 })
@@ -181,8 +170,7 @@ const handlePhoneInput = (event: Event) => {
 }
 
 const validateForm = (): boolean => {
-  errors.value.firstName = !form.value.firstName.trim()
-  errors.value.lastName = !form.value.lastName.trim()
+  errors.value.fullName = !form.value.fullName.trim()
 
   const phoneNumber = form.value.phone.startsWith('998')
     ? form.value.phone
@@ -192,12 +180,7 @@ const validateForm = (): boolean => {
 
   errors.value.password = !form.value.password || form.value.password.length < 8
 
-  return (
-    !errors.value.firstName &&
-    !errors.value.lastName &&
-    !errors.value.phone &&
-    !errors.value.password
-  )
+  return !errors.value.fullName && !errors.value.phone && !errors.value.password
 }
 
 const handleSubmit = async () => {
@@ -217,18 +200,39 @@ const handleSubmit = async () => {
       ? form.value.phone
       : '998' + form.value.phone
 
-    await authStore.signUp({
-      firstName: form.value.firstName.trim(),
-      lastName: form.value.lastName.trim(),
+    const response = await authStore.signUp({
+      fullName: form.value.fullName.trim(),
       phone: phoneNumber,
       password: form.value.password,
     })
 
-    // Navigate to OTP screen
-    router.push({
-      path: '/auth/otp',
-      query: { phone: phoneNumber },
-    })
+    // Check if we got tokens directly (user auto-verified) or need OTP verification
+    if (response.data?.accessToken) {
+      // User is already authenticated, navigate to home
+      router.push('/home')
+    } else if (response.data?.code) {
+      // Need OTP verification, navigate to OTP screen
+      router.push({
+        path: '/auth/otp',
+        query: {
+          phone: phoneNumber,
+          code: response.data.code,
+        },
+      })
+    } else {
+      // Fallback: assume OTP is needed
+      showToast({
+        message: 'Please check your phone for verification code',
+        type: 'success',
+      })
+      router.push({
+        path: '/auth/otp',
+        query: {
+          phone: phoneNumber,
+          code: phoneNumber, // Fallback code
+        },
+      })
+    }
   } catch (error) {
     // Error is handled in the service
   } finally {

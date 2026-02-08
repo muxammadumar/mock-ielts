@@ -53,22 +53,14 @@
         </span>
       </div>
     </div>
-
-    <CustomNumericKeypad
-      :disabled="isLoading"
-      @input="handleKeypadInput"
-      @backspace="handleKeypadBackspace"
-      @special="handleKeypadSpecial"
-    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/useAuthStore'
 import CustomOtpInput from '@/components/auth/CustomOtpInput.vue'
-import CustomNumericKeypad from '@/components/auth/CustomNumericKeypad.vue'
 import type { ComponentPublicInstance } from 'vue'
 
 const route = useRoute()
@@ -76,6 +68,8 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const phone = computed(() => (route.query.phone as string) || '')
+const code = computed(() => (route.query.code as string) || '')
+
 const formattedPhone = computed(() => {
   // Format phone number for display (e.g., +998 99 999 99 99)
   const cleaned = phone.value.replace(/\D/g, '')
@@ -120,34 +114,8 @@ const startTimer = () => {
   }, 1000)
 }
 
-const handleKeypadInput = (digit: string) => {
-  if (otpCode.value.length < 5) {
-    otpCode.value += digit
-    hasError.value = false
-    // Focus the next empty field after update
-    nextTick(() => {
-      otpInputRef.value?.focus()
-    })
-  }
-}
-
-const handleKeypadBackspace = () => {
-  if (otpCode.value.length > 0) {
-    otpCode.value = otpCode.value.slice(0, -1)
-    hasError.value = false
-    // Focus the last filled field after update
-    nextTick(() => {
-      otpInputRef.value?.focus()
-    })
-  }
-}
-
-const handleKeypadSpecial = () => {
-  // Special characters not used for OTP
-}
-
-const handleOtpComplete = async (code: string) => {
-  if (!phone.value) {
+const handleOtpComplete = async (otp: string) => {
+  if (!code.value) {
     router.push('/auth/signin')
     return
   }
@@ -157,8 +125,8 @@ const handleOtpComplete = async (code: string) => {
 
   try {
     await authStore.verifyOtp({
-      phone: phone.value,
-      code,
+      code: code.value,
+      otp,
     })
 
     // Navigate to home on success
@@ -173,7 +141,7 @@ const handleOtpComplete = async (code: string) => {
 }
 
 const handleResend = async () => {
-  if (!phone.value) {
+  if (!code.value) {
     router.push('/auth/signin')
     return
   }
@@ -184,8 +152,8 @@ const handleResend = async () => {
   otpInputRef.value?.clear()
 
   try {
-    await authStore.sendOtp({
-      phone: phone.value,
+    await authStore.resendOtp({
+      code: code.value,
     })
     startTimer()
   } catch (error) {
@@ -200,7 +168,7 @@ const handleBack = () => {
 }
 
 onMounted(() => {
-  if (!phone.value) {
+  if (!phone.value || !code.value) {
     router.push('/auth/signin')
     return
   }

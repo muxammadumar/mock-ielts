@@ -5,6 +5,8 @@ import type {
   VerifyOtpDto,
   ResendDto,
   RefreshTokenDto,
+  ForgotPasswordDto,
+  ResetPasswordDto,
   AuthResponse,
   OtpResponse,
   SignInRequest,
@@ -12,7 +14,6 @@ import type {
   SendOtpRequest,
   VerifyOtpRequest,
 } from '@/types/auth'
-import type { ApiResponse } from '@/types'
 import { showToast } from 'vant'
 import type { AxiosError } from 'axios'
 
@@ -21,73 +22,34 @@ import type { AxiosError } from 'axios'
  */
 const getErrorMessage = (error: unknown, defaultMessage: string): string => {
   if (error && typeof error === 'object' && 'response' in error) {
-    const axiosError = error as AxiosError<{ message?: string; error?: string }>
+    const axiosError = error as AxiosError<AuthResponse | OtpResponse>
     if (axiosError.response?.data) {
-      return (
-        axiosError.response.data.message ||
-        axiosError.response.data.error ||
-        axiosError.response.statusText ||
-        defaultMessage
-      )
+      const data = axiosError.response.data
+      // Check if response has message field
+      if ('message' in data && typeof data.message === 'string') {
+        return data.message
+      }
+      // Check if response has error object
+      if ('error' in data && data.error && typeof data.error === 'object' && 'details' in data.error) {
+        return String(data.error.details)
+      }
     }
   }
   return defaultMessage
 }
 
 /**
- * Extract data from API response (handles both wrapped and direct formats)
- */
-const extractResponseData = <T>(response: unknown): T => {
-  // If response is already the data (direct format)
-  if (response && typeof response === 'object' && 'accessToken' in response) {
-    return response as T
-  }
-  // If response is wrapped in ApiResponse format
-  if (response && typeof response === 'object' && 'data' in response) {
-    return (response as ApiResponse<T>).data
-  }
-  // Fallback: return response as-is
-  return response as T
-}
-
-/**
- * User login - POST /api/v1/auth/login
- */
-export const signIn = async (credentials: SignInRequest): Promise<AuthResponse> => {
-  try {
-    const loginDto: LoginDto = {
-      phone: credentials.phone,
-      password: credentials.password,
-    }
-    const response = await apiClient.post('/v1/auth/login', loginDto)
-    const data = extractResponseData<AuthResponse>(response)
-    console.log('Login response:', data) // Log for debugging
-    return data
-  } catch (error) {
-    const message = getErrorMessage(error, 'Invalid credentials')
-    showToast({
-      message,
-      type: 'fail',
-    })
-    throw error
-  }
-}
-
-/**
  * User registration - POST /api/v1/auth/register
  */
-export const signUp = async (data: SignUpRequest): Promise<AuthResponse> => {
+export const signUp = async (request: SignUpRequest): Promise<AuthResponse> => {
   try {
     const registerDto: RegisterDto = {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      phone: data.phone,
-      password: data.password,
+      phone_number: request.phone,
+      fullName: request.fullName,
+      password: request.password,
     }
     const response = await apiClient.post('/v1/auth/register', registerDto)
-    const authData = extractResponseData<AuthResponse>(response)
-    console.log('Register response:', authData) // Log for debugging
-    return authData
+    return response as unknown as AuthResponse
   } catch (error) {
     const message = getErrorMessage(error, 'Failed to create account')
     showToast({
@@ -99,20 +61,18 @@ export const signUp = async (data: SignUpRequest): Promise<AuthResponse> => {
 }
 
 /**
- * Resend OTP code - POST /api/v1/auth/email/resend-otp
- * Note: Sending phone number in email field as per API requirement
+ * User login - POST /api/v1/auth/login
  */
-export const sendOtp = async (request: SendOtpRequest): Promise<OtpResponse> => {
+export const signIn = async (credentials: SignInRequest): Promise<AuthResponse> => {
   try {
-    const resendDto: ResendDto = {
-      email: request.phone, // Using phone in email field
+    const loginDto: LoginDto = {
+      phone_number: credentials.phone,
+      password: credentials.password,
     }
-    const response = await apiClient.post('/v1/auth/email/resend-otp', resendDto)
-    const data = extractResponseData<OtpResponse>(response)
-    console.log('Resend OTP response:', data) // Log for debugging
-    return data
+    const response = await apiClient.post('/v1/auth/login', loginDto)
+    return response as unknown as AuthResponse
   } catch (error) {
-    const message = getErrorMessage(error, 'Failed to send code')
+    const message = getErrorMessage(error, 'Invalid credentials')
     showToast({
       message,
       type: 'fail',
@@ -122,21 +82,38 @@ export const sendOtp = async (request: SendOtpRequest): Promise<OtpResponse> => 
 }
 
 /**
- * Verify OTP code - POST /api/v1/auth/email/verify-otp
- * Note: Sending phone number in email field as per API requirement
+ * Resend OTP code - POST /api/v1/auth/sms/resend-otp
+ */
+export const resendOtp = async (request: SendOtpRequest): Promise<OtpResponse> => {
+  try {
+    const resendDto: ResendDto = {
+      code: request.code,
+    }
+    const response = await apiClient.post('/v1/auth/sms/resend-otp', resendDto)
+    return response as unknown as OtpResponse
+  } catch (error) {
+    const message = getErrorMessage(error, 'Failed to resend code')
+    showToast({
+      message,
+      type: 'fail',
+    })
+    throw error
+  }
+}
+
+/**
+ * Verify OTP code via SMS - POST /api/v1/auth/sms/verify-otp
  */
 export const verifyOtp = async (request: VerifyOtpRequest): Promise<AuthResponse> => {
   try {
     const verifyDto: VerifyOtpDto = {
-      email: request.phone, // Using phone in email field
+      otp: request.otp,
       code: request.code,
     }
-    const response = await apiClient.post('/v1/auth/email/verify-otp', verifyDto)
-    const data = extractResponseData<AuthResponse>(response)
-    console.log('Verify OTP response:', data) // Log for debugging
-    return data
+    const response = await apiClient.post('/v1/auth/sms/verify-otp', verifyDto)
+    return response as unknown as AuthResponse
   } catch (error) {
-    const message = getErrorMessage(error, 'Incorrect code')
+    const message = getErrorMessage(error, 'Incorrect verification code')
     showToast({
       message,
       type: 'fail',
@@ -163,14 +140,62 @@ export const signOut = async (): Promise<void> => {
 export const refreshTokens = async (refreshToken: string): Promise<AuthResponse> => {
   try {
     const refreshDto: RefreshTokenDto = {
-      refreshToken,
+      refresh_token: refreshToken,
     }
     const response = await apiClient.post('/v1/auth/refresh', refreshDto)
-    const data = extractResponseData<AuthResponse>(response)
-    console.log('Refresh tokens response:', data) // Log for debugging
-    return data
+    return response as unknown as AuthResponse
   } catch (error) {
     console.error('Refresh tokens error:', error)
+    throw error
+  }
+}
+
+/**
+ * Request password reset - POST /api/v1/auth/password/forgot
+ */
+export const forgotPassword = async (email: string): Promise<OtpResponse> => {
+  try {
+    const forgotDto: ForgotPasswordDto = {
+      email,
+    }
+    const response = await apiClient.post('/v1/auth/password/forgot', forgotDto)
+    showToast({
+      message: 'Password reset code sent to your email',
+      type: 'success',
+    })
+    return response as unknown as OtpResponse
+  } catch (error) {
+    const message = getErrorMessage(error, 'Failed to send reset code')
+    showToast({
+      message,
+      type: 'fail',
+    })
+    throw error
+  }
+}
+
+/**
+ * Reset password - POST /api/v1/auth/password/reset
+ */
+export const resetPassword = async (otp: string, code: string, newPassword: string): Promise<AuthResponse> => {
+  try {
+    const resetDto: ResetPasswordDto = {
+      otp,
+      code,
+      newPassword,
+    }
+    const response = await apiClient.post('/v1/auth/password/reset', resetDto)
+    showToast({
+      message: 'Password reset successfully',
+      type: 'success',
+    })
+    return response as unknown as AuthResponse
+  } catch (error) {
+    const message = getErrorMessage(error, 'Failed to reset password')
+    showToast({
+      message,
+      type: 'fail',
+    })
     throw error
   }
 }
