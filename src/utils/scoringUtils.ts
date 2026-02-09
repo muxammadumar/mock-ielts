@@ -6,6 +6,7 @@ import type {
   PartResult,
   QuestionResult,
 } from '@/types/listening'
+import type { ReadingTest, ReadingTestResult } from '@/types/reading'
 
 /**
  * Normalize answer string for comparison
@@ -203,6 +204,59 @@ export const generateTestResult = (
 
   // Generate question results
   const questionResults = generateQuestionResults(testData, answers)
+
+  return {
+    testId: testData.id,
+    totalQuestions: testData.totalQuestions,
+    correctAnswers: rawScore,
+    score: bandScore,
+    rawScore,
+    timeSpent,
+    completedAt: new Date().toISOString(),
+    partResults,
+    questionResults,
+  }
+}
+
+/**
+ * Generate complete reading test result
+ */
+export const generateReadingTestResult = (
+  testData: ReadingTest,
+  answers: Record<number, Answer>,
+  timeSpent: number
+): ReadingTestResult => {
+  const allQuestions: Question[] = testData.parts.flatMap((part) => part.questions)
+  const rawScore = calculateRawScore(answers, allQuestions)
+  const bandScore = calculateBandScore(rawScore, testData.totalQuestions)
+
+  const partResults: PartResult[] = testData.parts.map((part) => {
+    let correctAnswers = 0
+    part.questions.forEach((question) => {
+      const userAnswer = answers[question.id]?.value
+      if (validateAnswer(userAnswer, question.correctAnswer, question.acceptableAnswers)) {
+        correctAnswers++
+      }
+    })
+    return {
+      partNumber: part.partNumber,
+      totalQuestions: part.questions.length,
+      correctAnswers,
+    }
+  })
+
+  const questionResults: QuestionResult[] = testData.parts.flatMap((part) =>
+    part.questions.map((question) => {
+      const userAnswer = answers[question.id]?.value || ''
+      return {
+        questionId: question.id,
+        userAnswer,
+        correctAnswer: question.correctAnswer,
+        isCorrect: validateAnswer(userAnswer, question.correctAnswer, question.acceptableAnswers),
+        questionType: question.type,
+      }
+    })
+  )
 
   return {
     testId: testData.id,

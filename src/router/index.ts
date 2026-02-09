@@ -79,6 +79,16 @@ const router = createRouter({
           name: 'listening-results',
           component: () => import('@/views/ListeningResultsView.vue'),
         },
+        {
+          path: 'reading-intro',
+          name: 'reading-intro',
+          component: () => import('@/views/ReadingIntroView.vue'),
+        },
+        {
+          path: 'reading-test',
+          name: 'reading-test',
+          component: () => import('@/views/ReadingTestView.vue'),
+        },
       ],
     },
   ],

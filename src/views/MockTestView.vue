@@ -28,7 +28,7 @@
           <Icon name="listening-icon" size="40px" />
           <p class="mock-test-view__grid-item-title">Listening</p>
         </div>
-        <div class="mock-test-view__grid-item">
+        <div class="mock-test-view__grid-item" @click="navigateToReading">
           <Icon name="reading-icon" size="40px" />
           <p class="mock-test-view__grid-item-title">Reading</p>
         </div>
@@ -55,6 +55,10 @@ const points = 100
 
 const navigateToListening = () => {
   router.push({ name: 'listening-intro' })
+}
+
+const navigateToReading = () => {
+  router.push({ name: 'reading-intro' })
 }
 </script>
 
