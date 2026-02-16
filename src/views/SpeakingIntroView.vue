@@ -2,62 +2,62 @@
 import { useRouter } from 'vue-router'
 import TestNavHeader from '@/components/common/TestNavHeader.vue'
 import PrimaryButton from '@/components/common/PrimaryButton.vue'
-import { useListeningStore } from '@/stores/useListeningStore'
+import { useSpeakingStore } from '@/stores/useSpeakingStore'
 import { useAttemptStore } from '@/stores/useAttemptStore'
 
 const router = useRouter()
-const listeningStore = useListeningStore()
+const speakingStore = useSpeakingStore()
 const attemptStore = useAttemptStore()
 
 const startTest = () => {
   if (!attemptStore.attemptId) {
-    listeningStore.resetTest()
+    speakingStore.resetTest()
   }
-  router.push({ name: 'listening-test' })
+  router.push({ name: 'speaking-test' })
 }
 </script>
 
 <template>
-  <div class="listening-intro-view">
-    <TestNavHeader title="Listening test" @back="router.back()" />
-    <div class="listening-intro-view__content">
-      <div class="listening-intro-view__info-card">
-        <h1 class="listening-intro-view__card-title">IELTS Listening Test</h1>
-        <p class="listening-intro-view__card-subtitle">Enhance concentration + audio skills</p>
-        <div class="listening-intro-view__info-item">
+  <div class="speaking-intro-view">
+    <TestNavHeader title="Speaking test" @back="router.back()" />
+    <div class="speaking-intro-view__content">
+      <div class="speaking-intro-view__info-card">
+        <h1 class="speaking-intro-view__card-title">IELTS Speaking Test</h1>
+        <p class="speaking-intro-view__card-subtitle">Practice your spoken English fluency</p>
+        <div class="speaking-intro-view__info-item">
           <Icon name="book-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">40</p>
-            <p class="listening-intro-view__info-label">LISTENING QUESTIONS</p>
+          <div class="speaking-intro-view__info-content">
+            <p class="speaking-intro-view__info-value">3 Parts</p>
+            <p class="speaking-intro-view__info-label">STRUCTURED INTERVIEW FORMAT</p>
           </div>
         </div>
-        <div class="listening-intro-view__info-item">
+        <div class="speaking-intro-view__info-item">
           <Icon name="time-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">30 mins + 10 mins</p>
-            <p class="listening-intro-view__info-label">AUDIO DURATION + TRANSFER TIME (SIMULATED)</p>
+          <div class="speaking-intro-view__info-content">
+            <p class="speaking-intro-view__info-value">11–14 mins</p>
+            <p class="speaking-intro-view__info-label">TOTAL DURATION</p>
           </div>
         </div>
       </div>
 
-      <div class="listening-intro-view__rules-card">
-        <h3 class="listening-intro-view__rules-title">Before you start</h3>
-        <ul class="listening-intro-view__rules-list">
-          <li>You must wear headphones or be in a quiet place for clear audio.</li>
-          <li>Audio will play only once — just like in the real exam.</li>
-          <li>You cannot pause, rewind, or replay the audio.</li>
-          <li>Answers must be selected while listening; transfer time is included.</li>
-          <li>Your final score will be auto-calculated after submission.</li>
+      <div class="speaking-intro-view__rules-card">
+        <h3 class="speaking-intro-view__rules-title">Before you start</h3>
+        <ul class="speaking-intro-view__rules-list">
+          <li>You have 2 minutes to answer each question — use the time fully.</li>
+          <li>Speak clearly and at a natural pace; avoid rushing or long silences.</li>
+          <li>Your microphone will be activated when you press the record button.</li>
+          <li>You can pause and resume recording, but cannot re-record a question once submitted.</li>
+          <li>You will be assessed on fluency, vocabulary, pronunciation, and grammar.</li>
         </ul>
       </div>
     </div>
 
-    <PrimaryButton @click="startTest">Start listening test</PrimaryButton>
+    <PrimaryButton @click="startTest">Start speaking test</PrimaryButton>
   </div>
 </template>
 
 <style scoped lang="scss">
-.listening-intro-view {
+.speaking-intro-view {
   width: 100%;
   height: 100%;
   background-color: #ede8f8;

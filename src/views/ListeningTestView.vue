@@ -4,14 +4,18 @@ import { useRouter } from 'vue-router'
 import { showConfirmDialog, showToast } from 'vant'
 import { useListeningStore } from '@/stores/useListeningStore'
 import { useListeningTest } from '@/composables/useListeningTest'
+import { useAttemptStore } from '@/stores/useAttemptStore'
+import { upsertAnswers, advanceSection, formatListeningAnswers } from '@/services/testService'
 import AudioPlayer from '@/components/listening/AudioPlayer.vue'
 import Timer from '@/components/listening/Timer.vue'
 import PartIndicator from '@/components/listening/PartIndicator.vue'
 import PartNavigation from '@/components/listening/PartNavigation.vue'
 import QuestionsList from '@/components/listening/QuestionsList.vue'
+import PrimaryButton from '@/components/common/PrimaryButton.vue'
 
 const router = useRouter()
 const listeningStore = useListeningStore()
+const attemptStore = useAttemptStore()
 const { testData, fetchTestData } = useListeningTest()
 
 // Computed properties
@@ -71,16 +75,23 @@ const handleSubmit = async () => {
       cancelButtonText: 'Cancel',
     })
 
-    // Submit the test with testData
     listeningStore.submitTest(testData.value)
 
-    showToast({
-      message: 'Test submitted successfully!',
-      type: 'success',
-    })
-
-    // Navigate to results page
-    router.push({ name: 'listening-results' })
+    // If in full test flow, save answers and advance to next section
+    if (attemptStore.attemptId) {
+      try {
+        await upsertAnswers(attemptStore.attemptId, {
+          answers: formatListeningAnswers(listeningStore.answers),
+        })
+        await advanceSection(attemptStore.attemptId)
+      } catch (apiError) {
+        console.error('Failed to save listening answers:', apiError)
+      }
+      router.push({ name: 'reading-intro' })
+    } else {
+      showToast({ message: 'Test submitted successfully!', type: 'success' })
+      router.push({ name: 'listening-results' })
+    }
   } catch (error) {
     // User cancelled
     console.log('Submission cancelled')
@@ -146,23 +157,15 @@ onUnmounted(() => {
         @answer-change="handleAnswerChange"
       />
 
-      <van-button
-        type="primary"
-        block
-        size="large"
-        class="listening-test-view__submit-button"
-        @click="handleSubmit"
-      >
-        Submit
-      </van-button>
     </div>
+    <PrimaryButton @click="handleSubmit">Submit</PrimaryButton>
   </div>
 </template>
 
 <style scoped lang="scss">
 .listening-test-view {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #f5f5f5;
@@ -203,17 +206,9 @@ onUnmounted(() => {
   &__content {
     flex: 1;
     padding: 16px;
-    padding-bottom: calc(16px + 80px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
-
-  &__submit-button {
-    height: 56px;
-    border-radius: 24px;
-    font-size: 16px;
-    font-weight: 900;
-    margin-top: 24px;
-  }
 }
+
 </style>

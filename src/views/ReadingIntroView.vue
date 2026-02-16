@@ -2,62 +2,68 @@
 import { useRouter } from 'vue-router'
 import TestNavHeader from '@/components/common/TestNavHeader.vue'
 import PrimaryButton from '@/components/common/PrimaryButton.vue'
-import { useListeningStore } from '@/stores/useListeningStore'
+import { useReadingStore } from '@/stores/useReadingStore'
 import { useAttemptStore } from '@/stores/useAttemptStore'
 
 const router = useRouter()
-const listeningStore = useListeningStore()
+const readingStore = useReadingStore()
 const attemptStore = useAttemptStore()
 
 const startTest = () => {
   if (!attemptStore.attemptId) {
-    listeningStore.resetTest()
+    readingStore.resetTest()
   }
-  router.push({ name: 'listening-test' })
+  router.push({ name: 'reading-test' })
 }
 </script>
 
 <template>
-  <div class="listening-intro-view">
-    <TestNavHeader title="Listening test" @back="router.back()" />
-    <div class="listening-intro-view__content">
-      <div class="listening-intro-view__info-card">
-        <h1 class="listening-intro-view__card-title">IELTS Listening Test</h1>
-        <p class="listening-intro-view__card-subtitle">Enhance concentration + audio skills</p>
-        <div class="listening-intro-view__info-item">
+  <div class="reading-intro-view">
+    <TestNavHeader title="Reading test" @back="router.back()" />
+    <div class="reading-intro-view__content">
+      <div class="reading-intro-view__info-card">
+        <h1 class="reading-intro-view__card-title">IELTS Reading Test</h1>
+        <p class="reading-intro-view__card-subtitle">Improve comprehension skills</p>
+        <div class="reading-intro-view__info-item">
           <Icon name="book-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">40</p>
-            <p class="listening-intro-view__info-label">LISTENING QUESTIONS</p>
+          <div class="reading-intro-view__info-content">
+            <p class="reading-intro-view__info-value">40</p>
+            <p class="reading-intro-view__info-label">READING QUESTIONS</p>
           </div>
         </div>
-        <div class="listening-intro-view__info-item">
+        <div class="reading-intro-view__info-item">
           <Icon name="time-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">30 mins + 10 mins</p>
-            <p class="listening-intro-view__info-label">AUDIO DURATION + TRANSFER TIME (SIMULATED)</p>
+          <div class="reading-intro-view__info-content">
+            <p class="reading-intro-view__info-value">60 mins</p>
+            <p class="reading-intro-view__info-label">TOTAL DURATION</p>
+          </div>
+        </div>
+        <div class="reading-intro-view__info-item">
+          <Icon name="rank-badge" size="40px" />
+          <div class="reading-intro-view__info-content">
+            <p class="reading-intro-view__info-value">True Band Estimate</p>
+            <p class="reading-intro-view__info-label">BASED ON OFFICIAL IELTS CRITERIA</p>
           </div>
         </div>
       </div>
 
-      <div class="listening-intro-view__rules-card">
-        <h3 class="listening-intro-view__rules-title">Before you start</h3>
-        <ul class="listening-intro-view__rules-list">
-          <li>You must wear headphones or be in a quiet place for clear audio.</li>
-          <li>Audio will play only once — just like in the real exam.</li>
-          <li>You cannot pause, rewind, or replay the audio.</li>
-          <li>Answers must be selected while listening; transfer time is included.</li>
-          <li>Your final score will be auto-calculated after submission.</li>
+      <div class="reading-intro-view__rules-card">
+        <h3 class="reading-intro-view__rules-title">Before you start</h3>
+        <ul class="reading-intro-view__rules-list">
+          <li>The test contains 3 reading passages with increasing difficulty.</li>
+          <li>You must complete all questions within the 60-minute limit.</li>
+          <li>No extra time will be provided for transferring answers.</li>
+          <li>Every correct answer gives 1 mark; no negative marking.</li>
+          <li>Your score will be instantly converted to an estimated band.</li>
         </ul>
       </div>
+      <PrimaryButton @click="startTest">Start reading test</PrimaryButton>
     </div>
-
-    <PrimaryButton @click="startTest">Start listening test</PrimaryButton>
   </div>
 </template>
 
 <style scoped lang="scss">
-.listening-intro-view {
+.reading-intro-view {
   width: 100%;
   height: 100%;
   background-color: #ede8f8;

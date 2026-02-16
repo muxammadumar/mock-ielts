@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="mock-test-view__grid">
-        <div class="mock-test-view__grid-item" @click="navigateToListening">
+        <div class="mock-test-view__grid-item">
           <Icon name="listening-icon" size="40px" />
           <p class="mock-test-view__grid-item-title">Listening</p>
         </div>
@@ -41,27 +41,45 @@
           <p class="mock-test-view__grid-item-title">Speaking</p>
         </div>
       </div>
-      <button class="mock-test-view__button">Start full test</button>
     </div>
+    <PrimaryButton :loading="isLoading" @click="handleStartFullTest">
+      Start full test
+    </PrimaryButton>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { showToast } from 'vant'
 import UserHeader from '@/components/common/UserHeader.vue'
+import PrimaryButton from '@/components/common/PrimaryButton.vue'
+import { useAttemptStore } from '@/stores/useAttemptStore'
 
 const router = useRouter()
+const attemptStore = useAttemptStore()
 const points = 100
+const isLoading = ref(false)
 
-const navigateToListening = () => {
-  router.push({ name: 'listening-intro' })
+const handleStartFullTest = async () => {
+  isLoading.value = true
+  try {
+    await attemptStore.initTest()
+    const section = attemptStore.currentSection ?? 'listening'
+    router.push({ name: `${section}-intro` })
+  } catch (error: any) {
+    const message = error?.response?.data?.message ?? error?.message ?? 'Failed to start test. Please try again.'
+    showToast({ message, type: 'fail' })
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
 <style scoped lang="scss">
 .mock-test-view {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   background-image: url('@/assets/images/home-bg.png');
   background-size: cover;
   background-position: center;
@@ -71,7 +89,6 @@ const navigateToListening = () => {
   &__content {
     flex: 1;
     padding: 24px 16px;
-    padding-bottom: calc(12px + 80px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -146,17 +163,7 @@ const navigateToListening = () => {
       padding: 16px;
       border-radius: 24px;
       background-color: var(--color-background-white);
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
-
-      &:active {
-        transform: translateY(0);
-      }
+      cursor: default;
 
       &-title {
         font-size: 16px;
@@ -166,15 +173,6 @@ const navigateToListening = () => {
       }
     }
   }
-  &__button {
-    width: 100%;
-    height: 56px;
-    background-color: var(--color-primary);
-    color: var(--color-text-primary-white);
-    border: none;
-    border-radius: 24px;
-    font-size: 16px;
-    font-weight: 900;
-  }
 }
+
 </style>

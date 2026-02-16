@@ -2,62 +2,62 @@
 import { useRouter } from 'vue-router'
 import TestNavHeader from '@/components/common/TestNavHeader.vue'
 import PrimaryButton from '@/components/common/PrimaryButton.vue'
-import { useListeningStore } from '@/stores/useListeningStore'
+import { useWritingStore } from '@/stores/useWritingStore'
 import { useAttemptStore } from '@/stores/useAttemptStore'
 
 const router = useRouter()
-const listeningStore = useListeningStore()
+const writingStore = useWritingStore()
 const attemptStore = useAttemptStore()
 
 const startTest = () => {
   if (!attemptStore.attemptId) {
-    listeningStore.resetTest()
+    writingStore.resetTest()
   }
-  router.push({ name: 'listening-test' })
+  router.push({ name: 'writing-test' })
 }
 </script>
 
 <template>
-  <div class="listening-intro-view">
-    <TestNavHeader title="Listening test" @back="router.back()" />
-    <div class="listening-intro-view__content">
-      <div class="listening-intro-view__info-card">
-        <h1 class="listening-intro-view__card-title">IELTS Listening Test</h1>
-        <p class="listening-intro-view__card-subtitle">Enhance concentration + audio skills</p>
-        <div class="listening-intro-view__info-item">
+  <div class="writing-intro-view">
+    <TestNavHeader title="Writing test" @back="router.back()" />
+    <div class="writing-intro-view__content">
+      <div class="writing-intro-view__info-card">
+        <h1 class="writing-intro-view__card-title">IELTS Writing Test</h1>
+        <p class="writing-intro-view__card-subtitle">Develop your formal writing skills</p>
+        <div class="writing-intro-view__info-item">
           <Icon name="book-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">40</p>
-            <p class="listening-intro-view__info-label">LISTENING QUESTIONS</p>
+          <div class="writing-intro-view__info-content">
+            <p class="writing-intro-view__info-value">Task 1 & Task 2</p>
+            <p class="writing-intro-view__info-label">FORMAL WRITING TASKS</p>
           </div>
         </div>
-        <div class="listening-intro-view__info-item">
+        <div class="writing-intro-view__info-item">
           <Icon name="time-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">30 mins + 10 mins</p>
-            <p class="listening-intro-view__info-label">AUDIO DURATION + TRANSFER TIME (SIMULATED)</p>
+          <div class="writing-intro-view__info-content">
+            <p class="writing-intro-view__info-value">60 mins</p>
+            <p class="writing-intro-view__info-label">TOTAL DURATION</p>
           </div>
         </div>
       </div>
 
-      <div class="listening-intro-view__rules-card">
-        <h3 class="listening-intro-view__rules-title">Before you start</h3>
-        <ul class="listening-intro-view__rules-list">
-          <li>You must wear headphones or be in a quiet place for clear audio.</li>
-          <li>Audio will play only once — just like in the real exam.</li>
-          <li>You cannot pause, rewind, or replay the audio.</li>
-          <li>Answers must be selected while listening; transfer time is included.</li>
-          <li>Your final score will be auto-calculated after submission.</li>
+      <div class="writing-intro-view__rules-card">
+        <h3 class="writing-intro-view__rules-title">Before you start</h3>
+        <ul class="writing-intro-view__rules-list">
+          <li>Task 1 requires at least 150 words; Task 2 requires at least 250 words.</li>
+          <li>You should spend about 20 minutes on Task 1 and 40 minutes on Task 2.</li>
+          <li>Task 2 carries more marks than Task 1, so manage your time wisely.</li>
+          <li>Write in a formal academic style; avoid informal language or contractions.</li>
+          <li>Your response will be assessed on task achievement, coherence, vocabulary, and grammar.</li>
         </ul>
       </div>
     </div>
 
-    <PrimaryButton @click="startTest">Start listening test</PrimaryButton>
+    <PrimaryButton @click="startTest">Start writing test</PrimaryButton>
   </div>
 </template>
 
 <style scoped lang="scss">
-.listening-intro-view {
+.writing-intro-view {
   width: 100%;
   height: 100%;
   background-color: #ede8f8;

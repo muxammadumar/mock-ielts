@@ -79,6 +79,46 @@ const router = createRouter({
           name: 'listening-results',
           component: () => import('@/views/ListeningResultsView.vue'),
         },
+        {
+          path: 'reading-intro',
+          name: 'reading-intro',
+          component: () => import('@/views/ReadingIntroView.vue'),
+        },
+        {
+          path: 'reading-test',
+          name: 'reading-test',
+          component: () => import('@/views/ReadingTestView.vue'),
+        },
+        {
+          path: 'writing-intro',
+          name: 'writing-intro',
+          component: () => import('@/views/WritingIntroView.vue'),
+        },
+        {
+          path: 'writing-test',
+          name: 'writing-test',
+          component: () => import('@/views/WritingTestView.vue'),
+        },
+        {
+          path: 'speaking-intro',
+          name: 'speaking-intro',
+          component: () => import('@/views/SpeakingIntroView.vue'),
+        },
+        {
+          path: 'speaking-test',
+          name: 'speaking-test',
+          component: () => import('@/views/SpeakingTestView.vue'),
+        },
+        {
+          path: 'mock-test-result',
+          name: 'mock-test-result',
+          component: () => import('@/views/MockTestResultView.vue'),
+        },
+        {
+          path: 'answers-review',
+          name: 'answers-review',
+          component: () => import('@/views/AnswersReviewView.vue'),
+        },
       ],
     },
   ],
@@ -113,8 +153,11 @@ export const setupAuthGuards = (routerInstance: Router) => {
       return { name: 'signin', query: { redirect: to.fullPath } }
     }
 
-    // If user is authenticated and trying to access auth routes, redirect to home
-    if (isAuthenticated && to.matched.some(record => record.path.startsWith('/auth'))) {
+    // If user is authenticated and trying to access auth routes or onboarding, redirect to home
+    if (isAuthenticated && (
+      to.matched.some(record => record.path.startsWith('/auth')) ||
+      to.name === 'onboarding-view'
+    )) {
       return { name: 'home' }
     }
   })
