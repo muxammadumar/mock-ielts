@@ -7,16 +7,21 @@
       <div class="progress-overview-card__title-section">
         <div class="progress-overview-card__label">{{ $t('pages.home.progressOverview') }}</div>
         <div class="progress-overview-card__date-score">
-          {{ currentDate }} - {{ $t('pages.home.scoreBand') }} {{ scoreBand }}
+          {{ displayDate }} – {{ $t('pages.home.scoreBand') }} {{ displayBand }}
         </div>
       </div>
     </div>
     <TimeRangeSelector @select="handleTimeRangeSelect" />
-    <ProgressChart :data="progressData" :current-date="currentDate" />
+    <ProgressChart
+      :data="progressData"
+      :active-index="selectedIndex"
+      @select-point="selectedIndex = $event"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import Icon from '@/components/common/Icon.vue'
 import TimeRangeSelector from './TimeRangeSelector.vue'
 import ProgressChart from './ProgressChart.vue'
@@ -28,11 +33,20 @@ interface Props {
   scoreBand: number
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
+
+const selectedIndex = ref(props.progressData.length - 1)
+
+const selectedPoint = computed(() => props.progressData[selectedIndex.value])
+
+const displayDate = computed(() => selectedPoint.value?.date ?? props.currentDate)
+
+const displayBand = computed(() => {
+  const score = selectedPoint.value?.score ?? props.scoreBand
+  return Number.isInteger(score) ? score : score.toFixed(1)
+})
 
 const handleTimeRangeSelect = (range: TimeRange) => {
-  // Handle time range selection
-  // In real implementation, this would filter/refetch data based on range
   console.log('Selected time range:', range)
 }
 </script>

@@ -1,130 +1,146 @@
 <template>
-  <div class="progress-chart">
-    <Line :data="chartData" :options="chartOptions" />
-  </div>
+  <svg viewBox="0 0 360 180" width="100%" height="auto" class="progress-chart">
+    <!-- Dashed vertical grid lines -->
+    <line
+      v-for="(point, i) in points"
+      :key="`grid-${i}`"
+      :x1="point.x"
+      :y1="PADDING.top"
+      :x2="point.x"
+      :y2="180 - PADDING.bottom"
+      :stroke="i === activeIndex ? '#d4baff' : '#eeeeee'"
+      stroke-dasharray="3 4"
+      stroke-width="1"
+    />
+
+    <!-- Connecting line through all points -->
+    <polyline
+      :points="polylinePoints"
+      stroke="#a175f0"
+      stroke-width="2"
+      fill="none"
+    />
+
+    <!-- Inactive data points -->
+    <template v-for="(point, i) in points" :key="`point-${i}`">
+      <circle
+        v-if="i !== activeIndex"
+        :cx="point.x"
+        :cy="point.y"
+        r="4.5"
+        fill="rgba(161,117,240,0.25)"
+        stroke="#a175f0"
+        stroke-width="1.5"
+      />
+    </template>
+
+    <!-- Active data point (glow ring + filled circle) -->
+    <template v-if="activeIndex >= 0 && activeIndex < points.length">
+      <circle
+        :cx="points[activeIndex].x"
+        :cy="points[activeIndex].y"
+        r="13"
+        fill="rgba(161,117,240,0.15)"
+      />
+      <circle
+        :cx="points[activeIndex].x"
+        :cy="points[activeIndex].y"
+        r="8"
+        fill="#a175f0"
+      />
+
+      <!-- Score label above active point -->
+      <text
+        :x="points[activeIndex].x"
+        :y="points[activeIndex].y - 16"
+        font-size="13"
+        font-weight="600"
+        fill="#171717"
+        text-anchor="middle"
+      >{{ formatScore(data[activeIndex].score) }}</text>
+    </template>
+
+    <!-- X-axis date labels -->
+    <text
+      v-for="(point, i) in points"
+      :key="`label-${i}`"
+      :x="point.x"
+      y="176"
+      font-size="9.5"
+      fill="#aaaaaa"
+      text-anchor="middle"
+    >{{ data[i].date }}</text>
+
+    <!-- Click hit areas (transparent, large radius for easy tapping) -->
+    <circle
+      v-for="(point, i) in points"
+      :key="`hit-${i}`"
+      :cx="point.x"
+      :cy="point.y"
+      r="22"
+      fill="transparent"
+      cursor="pointer"
+      @click="$emit('selectPoint', i)"
+    />
+  </svg>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Line } from 'vue-chartjs'
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler,
-  type TooltipItem,
-} from 'chart.js'
 import type { ProgressDataPoint } from '@/types/dashboard'
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler)
+const PADDING = { top: 32, bottom: 38, left: 14, right: 14 }
+const VIEW_BOX_WIDTH = 360
+const VIEW_BOX_HEIGHT = 180
 
 interface Props {
   data: ProgressDataPoint[]
-  currentDate: string
+  activeIndex: number
 }
 
 const props = defineProps<Props>()
+defineEmits<{ selectPoint: [index: number] }>()
 
-const chartData = computed(() => {
-  const labels = props.data.map((point) => point.date)
-  const scores = props.data.map((point) => point.score)
-  const currentIndex = labels.findIndex((label) => label === props.currentDate)
+const points = computed(() => {
+  const n = props.data.length
+  if (n === 0) return []
 
-  return {
-    labels,
-    datasets: [
-      {
-        label: 'Score',
-        data: scores,
-        borderColor: '#a175f0',
-        backgroundColor: 'rgba(161, 117, 240, 0.1)',
-        borderWidth: 2,
-        fill: false,
-        tension: 0.4,
-        pointRadius: (context: { dataIndex: number }) => {
-          return context.dataIndex === currentIndex ? 6 : 4
-        },
-        pointBackgroundColor: (context: { dataIndex: number }) => {
-          return context.dataIndex === currentIndex ? '#a175f0' : '#a175f0'
-        },
-        pointBorderColor: '#ffffff',
-        pointBorderWidth: 2,
-        pointHoverRadius: 8,
-        pointHoverBorderWidth: 3,
-      },
-    ],
-  }
+  const chartWidth = VIEW_BOX_WIDTH - PADDING.left - PADDING.right
+  const chartHeight = VIEW_BOX_HEIGHT - PADDING.top - PADDING.bottom
+
+  const scores = props.data.map((d) => d.score)
+  const minScore = Math.min(...scores)
+  const maxScore = Math.max(...scores)
+
+  const buffer = 0.15 * chartHeight
+  const effectiveHeight = chartHeight - 2 * buffer
+
+  return props.data.map((d, i) => {
+    const x = n === 1 ? PADDING.left + chartWidth / 2 : PADDING.left + (i / (n - 1)) * chartWidth
+
+    let y: number
+    if (minScore === maxScore) {
+      y = PADDING.top + chartHeight / 2
+    } else {
+      y = PADDING.top + buffer + ((maxScore - d.score) / (maxScore - minScore)) * effectiveHeight
+    }
+
+    return { x, y }
+  })
 })
 
-const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false,
-    },
-    tooltip: {
-      enabled: true,
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      padding: 8,
-      titleFont: {
-        size: 12,
-        weight: 500,
-      },
-      bodyFont: {
-        size: 14,
-        weight: 600,
-      },
-      displayColors: false,
-      callbacks: {
-        label: (tooltipItem: TooltipItem<'line'>) => {
-          const value = tooltipItem.parsed.y
-          if (value === null || value === undefined) return ''
-          return `Score: ${value.toFixed(1)}`
-        },
-      },
-    },
-  },
-  scales: {
-    x: {
-      grid: {
-        display: true,
-        drawBorder: false,
-        borderDash: [4, 4],
-        color: 'rgba(0, 0, 0, 0.05)',
-      },
-      ticks: {
-        font: {
-          size: 11,
-        },
-        color: 'var(--color-text-secondary)',
-      },
-    },
-    y: {
-      display: false,
-      grid: {
-        display: false,
-      },
-    },
-  },
-  elements: {
-    point: {
-      hoverRadius: 8,
-    },
-  },
+const polylinePoints = computed(() =>
+  points.value.map((p) => `${p.x},${p.y}`).join(' '),
+)
+
+function formatScore(score: number): string {
+  return Number.isInteger(score) ? `${score}.0` : score.toFixed(1)
 }
 </script>
 
 <style scoped lang="scss">
 .progress-chart {
-  width: 100%;
-  height: 200px;
+  display: block;
   margin-top: var(--spacing-sm);
-  position: relative;
 }
 </style>
