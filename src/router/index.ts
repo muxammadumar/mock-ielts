@@ -109,6 +109,16 @@ const router = createRouter({
           name: 'speaking-test',
           component: () => import('@/views/SpeakingTestView.vue'),
         },
+        {
+          path: 'mock-test-result',
+          name: 'mock-test-result',
+          component: () => import('@/views/MockTestResultView.vue'),
+        },
+        {
+          path: 'answers-review',
+          name: 'answers-review',
+          component: () => import('@/views/AnswersReviewView.vue'),
+        },
       ],
     },
   ],

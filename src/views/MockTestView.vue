@@ -41,10 +41,10 @@
           <p class="mock-test-view__grid-item-title">Speaking</p>
         </div>
       </div>
-      <button class="mock-test-view__button" :disabled="isLoading" @click="handleStartFullTest">
-        {{ isLoading ? 'Loading...' : 'Start full test' }}
-      </button>
     </div>
+    <PrimaryButton :loading="isLoading" @click="handleStartFullTest">
+      Start full test
+    </PrimaryButton>
   </div>
 </template>
 
@@ -53,6 +53,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { showToast } from 'vant'
 import UserHeader from '@/components/common/UserHeader.vue'
+import PrimaryButton from '@/components/common/PrimaryButton.vue'
 import { useAttemptStore } from '@/stores/useAttemptStore'
 
 const router = useRouter()
@@ -78,7 +79,7 @@ const handleStartFullTest = async () => {
 <style scoped lang="scss">
 .mock-test-view {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
   background-image: url('@/assets/images/home-bg.png');
   background-size: cover;
   background-position: center;
@@ -88,7 +89,6 @@ const handleStartFullTest = async () => {
   &__content {
     flex: 1;
     padding: 24px 16px;
-    padding-bottom: calc(12px + 80px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -173,20 +173,6 @@ const handleStartFullTest = async () => {
       }
     }
   }
-  &__button {
-    width: 100%;
-    height: 56px;
-    background-color: var(--color-primary);
-    color: var(--color-text-primary-white);
-    border: none;
-    border-radius: 24px;
-    font-size: 16px;
-    font-weight: 900;
-
-    &:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-  }
 }
+
 </style>

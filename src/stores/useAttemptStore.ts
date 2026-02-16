@@ -7,6 +7,7 @@ export const useAttemptStore = defineStore('attempt', () => {
   const testId = ref<string | null>(null)
   const testStructure = ref<any | null>(null)
   const currentSection = ref<'listening' | 'reading' | 'writing' | 'speaking' | null>(null)
+  const result = ref<any | null>(null)
 
   const initTest = async () => {
     // 1. Fetch published tests — response shape: { data: [{ id, title, ... }] }
@@ -58,6 +59,7 @@ export const useAttemptStore = defineStore('attempt', () => {
     testId.value = null
     testStructure.value = null
     currentSection.value = null
+    result.value = null
   }
 
   return {
@@ -65,6 +67,7 @@ export const useAttemptStore = defineStore('attempt', () => {
     testId,
     testStructure,
     currentSection,
+    result,
     initTest,
     advance,
     submit,

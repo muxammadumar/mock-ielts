@@ -10,6 +10,7 @@ import Timer from '@/components/listening/Timer.vue'
 import PassageQuestionsTab from '@/components/reading/PassageQuestionsTab.vue'
 import ReadingPassage from '@/components/reading/ReadingPassage.vue'
 import ReadingQuestionsList from '@/components/reading/ReadingQuestionsList.vue'
+import PrimaryButton from '@/components/common/PrimaryButton.vue'
 
 const router = useRouter()
 const readingStore = useReadingStore()
@@ -148,25 +149,16 @@ onUnmounted(() => {
           :instruction="currentPartData.instruction"
           @answer-change="handleAnswerChange"
         />
-
-        <van-button
-          type="primary"
-          block
-          size="large"
-          class="reading-test-view__submit-button"
-          @click="handleSubmit"
-        >
-          {{ submitButtonText }}
-        </van-button>
       </template>
     </div>
+    <PrimaryButton v-if="readingStore.activeTab !== 'passage'" @click="handleSubmit">{{ submitButtonText }}</PrimaryButton>
   </div>
 </template>
 
 <style scoped lang="scss">
 .reading-test-view {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #f1f2ff;
@@ -219,17 +211,9 @@ onUnmounted(() => {
   &__content {
     flex: 1;
     padding: 0 16px 16px;
-    padding-bottom: calc(16px + 80px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  &__submit-button {
-    height: 56px;
-    border-radius: 24px;
-    font-size: 16px;
-    font-weight: 900;
-    margin-top: 24px;
-  }
 }
 </style>

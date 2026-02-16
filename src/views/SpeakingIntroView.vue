@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import UserHeader from '@/components/common/UserHeader.vue'
+import TestNavHeader from '@/components/common/TestNavHeader.vue'
+import PrimaryButton from '@/components/common/PrimaryButton.vue'
 import { useSpeakingStore } from '@/stores/useSpeakingStore'
 import { useAttemptStore } from '@/stores/useAttemptStore'
 
@@ -8,10 +9,7 @@ const router = useRouter()
 const speakingStore = useSpeakingStore()
 const attemptStore = useAttemptStore()
 
-const points = 100
-
 const startTest = () => {
-  // Only reset test state if not in a full test flow
   if (!attemptStore.attemptId) {
     speakingStore.resetTest()
   }
@@ -21,24 +19,23 @@ const startTest = () => {
 
 <template>
   <div class="speaking-intro-view">
-    <UserHeader :points="points" />
+    <TestNavHeader title="Speaking test" @back="router.back()" />
     <div class="speaking-intro-view__content">
-      <h1 class="speaking-intro-view__title">IELTS Speaking Test</h1>
-      <p class="speaking-intro-view__subtitle">Practice your spoken English fluency</p>
-
       <div class="speaking-intro-view__info-card">
+        <h1 class="speaking-intro-view__card-title">IELTS Speaking Test</h1>
+        <p class="speaking-intro-view__card-subtitle">Practice your spoken English fluency</p>
         <div class="speaking-intro-view__info-item">
           <Icon name="book-gray" size="40px" />
           <div class="speaking-intro-view__info-content">
             <p class="speaking-intro-view__info-value">3 Parts</p>
-            <p class="speaking-intro-view__info-title">STRUCTURED INTERVIEW FORMAT</p>
+            <p class="speaking-intro-view__info-label">STRUCTURED INTERVIEW FORMAT</p>
           </div>
         </div>
         <div class="speaking-intro-view__info-item">
           <Icon name="time-gray" size="40px" />
           <div class="speaking-intro-view__info-content">
             <p class="speaking-intro-view__info-value">11–14 mins</p>
-            <p class="speaking-intro-view__info-title">TOTAL DURATION</p>
+            <p class="speaking-intro-view__info-label">TOTAL DURATION</p>
           </div>
         </div>
       </div>
@@ -53,65 +50,53 @@ const startTest = () => {
           <li>You will be assessed on fluency, vocabulary, pronunciation, and grammar.</li>
         </ul>
       </div>
-
-      <van-button
-        type="primary"
-        block
-        size="large"
-        class="speaking-intro-view__start-button"
-        @click="startTest"
-      >
-        Start speaking test
-      </van-button>
     </div>
+
+    <PrimaryButton @click="startTest">Start speaking test</PrimaryButton>
   </div>
 </template>
 
 <style scoped lang="scss">
 .speaking-intro-view {
   width: 100%;
-  min-height: 100%;
-  background-image: url('@/assets/images/home-bg.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  height: 100%;
+  background-color: #ede8f8;
   display: flex;
   flex-direction: column;
 
   &__content {
     flex: 1;
-    padding: 24px 16px;
-    padding-bottom: calc(12px + 80px);
+    padding: 16px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-  }
-
-  &__title {
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--color-text-primary-white);
-    line-height: 36px;
-    text-align: center;
-    margin: 0 auto;
-    margin-bottom: 8px;
-  }
-
-  &__subtitle {
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.8);
-    text-align: center;
-    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   &__info-card {
-    background-color: var(--color-background-white);
+    background-color: #ffffff;
     border-radius: 24px;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin-bottom: 12px;
+  }
+
+  &__card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #171717;
+    margin: 0;
+    line-height: 24px;
+  }
+
+  &__card-subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    color: #5c5c5c;
+    margin: -8px 0 0 0;
+    line-height: 20px;
   }
 
   &__info-item {
@@ -134,7 +119,7 @@ const startTest = () => {
     margin: 0;
   }
 
-  &__info-title {
+  &__info-label {
     font-size: 11px;
     font-weight: 400;
     color: #5c5c5c;
@@ -144,10 +129,9 @@ const startTest = () => {
   }
 
   &__rules-card {
-    background-color: var(--color-background-white);
+    background-color: #ffffff;
     border-radius: 24px;
     padding: 20px;
-    margin-bottom: 24px;
   }
 
   &__rules-title {
@@ -168,16 +152,9 @@ const startTest = () => {
     li {
       font-size: 14px;
       font-weight: 400;
-      color: var(--color-text-secondary);
+      color: #5c5c5c;
       line-height: 20px;
     }
-  }
-
-  &__start-button {
-    height: 56px;
-    border-radius: 24px;
-    font-size: 16px;
-    font-weight: 900;
   }
 }
 </style>

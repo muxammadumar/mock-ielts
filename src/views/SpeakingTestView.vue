@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { showConfirmDialog, showToast } from 'vant'
 import { useSpeakingStore } from '@/stores/useSpeakingStore'
 import { useSpeakingTest } from '@/composables/useSpeakingTest'
 import { useAttemptStore } from '@/stores/useAttemptStore'
-import { upsertAnswers, submitAttempt, uploadAudioFile, formatSpeakingAnswers } from '@/services/testService'
+import { upsertAnswers, submitAttempt, uploadAudioFile, formatSpeakingAnswers, getAttemptResult } from '@/services/testService'
 import Timer from '@/components/listening/Timer.vue'
 import SpeakingQuestionCard from '@/components/speaking/SpeakingQuestionCard.vue'
 import VoiceRecorder from '@/components/speaking/VoiceRecorder.vue'
+import PrimaryButton from '@/components/common/PrimaryButton.vue'
 
 const router = useRouter()
 const speakingStore = useSpeakingStore()
 const attemptStore = useAttemptStore()
 const { testData, fetchTestData } = useSpeakingTest()
+
+const showFinishDialog = ref(false)
+const isAnalyzing = ref(false)
 
 const allQuestions = computed(() => testData.value.parts.flatMap((p) => p.questions))
 const currentQuestion = computed(() => allQuestions.value[speakingStore.currentQuestionIndex])
@@ -70,59 +74,74 @@ const handleBack = async () => {
 
 const handleSubmit = async () => {
   if (speakingStore.isLastQuestion) {
-    try {
-      await showConfirmDialog({
-        title: 'Submit Test',
-        message: `You have answered ${speakingStore.questionsAnswered} out of ${testData.value.totalQuestions} questions. Do you want to submit?`,
-        confirmButtonText: 'Submit',
-        cancelButtonText: 'Cancel',
-      })
-
-      speakingStore.submitTest()
-
-      // If in full test flow, upload recordings, save answers, and submit attempt
-      if (attemptStore.attemptId) {
-        try {
-          const questions = allQuestions.value
-          const recordingEntries = questions.map((q) => ({
-            questionId: q.id,
-            blob: speakingStore.getRecording(q.id) ?? null,
-          }))
-
-          // Upload each recording that has a blob
-          const fileIds = await Promise.all(
-            recordingEntries.map(async (rec) => {
-              if (rec.blob) {
-                try {
-                  return await uploadAudioFile(rec.blob)
-                } catch {
-                  return ''
-                }
-              }
-              return ''
-            }),
-          )
-
-          await upsertAnswers(attemptStore.attemptId!, {
-            answers: formatSpeakingAnswers(recordingEntries, fileIds),
-          })
-          await submitAttempt(attemptStore.attemptId!)
-        } catch (apiError) {
-          console.error('Failed to save speaking answers:', apiError)
-        }
-        router.push({ name: 'listening-results' })
-      } else {
+    if (attemptStore.attemptId) {
+      // Full test mode: show custom confirmation dialog
+      showFinishDialog.value = true
+    } else {
+      // Non-full-test mode: use existing Vant confirm dialog
+      try {
+        await showConfirmDialog({
+          title: 'Submit Test',
+          message: `You have answered ${speakingStore.questionsAnswered} out of ${testData.value.totalQuestions} questions. Do you want to submit?`,
+          confirmButtonText: 'Submit',
+          cancelButtonText: 'Cancel',
+        })
+        speakingStore.submitTest()
         showToast({ message: 'Test submitted successfully!', type: 'success' })
         router.push({ name: 'mock-test' })
+      } catch {
+        // User cancelled
       }
-    } catch {
-      // User cancelled
     }
   } else {
     speakingStore.advanceToNextQuestion()
     speakingStore.startQuestionTimer()
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+}
+
+const handleFinishSubmit = async () => {
+  showFinishDialog.value = false
+  isAnalyzing.value = true
+
+  try {
+    speakingStore.submitTest()
+
+    const questions = allQuestions.value
+    const recordingEntries = questions.map((q) => ({
+      questionId: q.id,
+      blob: speakingStore.getRecording(q.id) ?? null,
+    }))
+
+    const fileIds = await Promise.all(
+      recordingEntries.map(async (rec) => {
+        if (rec.blob) {
+          try {
+            return await uploadAudioFile(rec.blob)
+          } catch {
+            return ''
+          }
+        }
+        return ''
+      }),
+    )
+
+    await upsertAnswers(attemptStore.attemptId!, {
+      answers: formatSpeakingAnswers(recordingEntries, fileIds),
+    })
+    await submitAttempt(attemptStore.attemptId!)
+    const apiResult = await getAttemptResult(attemptStore.attemptId!)
+    attemptStore.result = apiResult?.data ?? apiResult
+  } catch (apiError) {
+    console.error('Failed to save speaking answers:', apiError)
+  }
+
+  isAnalyzing.value = false
+  router.push({ name: 'mock-test-result' })
+}
+
+const handleFinishCancel = () => {
+  showFinishDialog.value = false
 }
 
 const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -171,16 +190,37 @@ onUnmounted(() => {
         @delete="handleRecordingDelete"
         @recorded="handleRecorded"
       />
+    </div>
+    <PrimaryButton @click="handleSubmit">{{ submitButtonText }}</PrimaryButton>
 
-      <van-button
-        type="primary"
-        block
-        size="large"
-        class="speaking-test-view__submit-button"
-        @click="handleSubmit"
-      >
-        {{ submitButtonText }}
-      </van-button>
+    <!-- Confirmation overlay -->
+    <div v-if="showFinishDialog" class="speaking-test-view__overlay">
+      <div class="speaking-test-view__dialog">
+        <div class="speaking-test-view__dialog-icon">⚠️</div>
+        <h3 class="speaking-test-view__dialog-title">Finish Full Mock Test?</h3>
+        <p class="speaking-test-view__dialog-text">
+          You are about to submit all sections. This action cannot be undone.
+        </p>
+        <div class="speaking-test-view__dialog-buttons">
+          <button class="speaking-test-view__dialog-btn speaking-test-view__dialog-btn--back" @click="handleFinishCancel">
+            Go Back to Test
+          </button>
+          <button class="speaking-test-view__dialog-btn speaking-test-view__dialog-btn--submit" @click="handleFinishSubmit">
+            Finish & Submit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading overlay -->
+    <div v-if="isAnalyzing" class="speaking-test-view__overlay">
+      <div class="speaking-test-view__dialog">
+        <div class="speaking-test-view__spinner" />
+        <h3 class="speaking-test-view__dialog-title">Analyzing Your Answers...</h3>
+        <p class="speaking-test-view__dialog-text">
+          Please wait while our AI reviews your responses. This may take a moment.
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -188,7 +228,7 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .speaking-test-view {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #f1f2ff;
@@ -233,17 +273,101 @@ onUnmounted(() => {
   &__content {
     flex: 1;
     padding: 16px;
-    padding-bottom: calc(16px + 80px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  &__submit-button {
-    height: 56px;
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 24px;
+  }
+
+  &__dialog {
+    background: #ffffff;
     border-radius: 24px;
-    font-size: 16px;
-    font-weight: 900;
-    margin-top: 8px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    &-icon {
+      font-size: 40px;
+      line-height: 1;
+    }
+
+    &-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #171717;
+      text-align: center;
+      margin: 0;
+    }
+
+    &-text {
+      font-size: 14px;
+      color: #5c5c5c;
+      text-align: center;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    &-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    &-btn {
+      width: 100%;
+      height: 48px;
+      border-radius: 24px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+
+      &:active {
+        opacity: 0.8;
+      }
+
+      &--back {
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        color: #171717;
+      }
+
+      &--submit {
+        background: var(--color-primary);
+        border: none;
+        color: #ffffff;
+      }
+    }
+  }
+
+  &__spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #e5e5e5;
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>

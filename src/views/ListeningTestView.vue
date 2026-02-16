@@ -11,6 +11,7 @@ import Timer from '@/components/listening/Timer.vue'
 import PartIndicator from '@/components/listening/PartIndicator.vue'
 import PartNavigation from '@/components/listening/PartNavigation.vue'
 import QuestionsList from '@/components/listening/QuestionsList.vue'
+import PrimaryButton from '@/components/common/PrimaryButton.vue'
 
 const router = useRouter()
 const listeningStore = useListeningStore()
@@ -156,23 +157,15 @@ onUnmounted(() => {
         @answer-change="handleAnswerChange"
       />
 
-      <van-button
-        type="primary"
-        block
-        size="large"
-        class="listening-test-view__submit-button"
-        @click="handleSubmit"
-      >
-        Submit
-      </van-button>
     </div>
+    <PrimaryButton @click="handleSubmit">Submit</PrimaryButton>
   </div>
 </template>
 
 <style scoped lang="scss">
 .listening-test-view {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #f5f5f5;
@@ -213,17 +206,9 @@ onUnmounted(() => {
   &__content {
     flex: 1;
     padding: 16px;
-    padding-bottom: calc(16px + 80px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
-
-  &__submit-button {
-    height: 56px;
-    border-radius: 24px;
-    font-size: 16px;
-    font-weight: 900;
-    margin-top: 24px;
-  }
 }
+
 </style>

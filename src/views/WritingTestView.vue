@@ -9,6 +9,7 @@ import { upsertAnswers, advanceSection, formatWritingAnswers } from '@/services/
 import Timer from '@/components/listening/Timer.vue'
 import WritingTaskCard from '@/components/writing/WritingTaskCard.vue'
 import WritingAnswerInput from '@/components/writing/WritingAnswerInput.vue'
+import PrimaryButton from '@/components/common/PrimaryButton.vue'
 
 const router = useRouter()
 const writingStore = useWritingStore()
@@ -119,24 +120,15 @@ onUnmounted(() => {
         :min-words="currentTask.minWords"
         @update:model-value="handleAnswerChange"
       />
-
-      <van-button
-        type="primary"
-        block
-        size="large"
-        class="writing-test-view__submit-button"
-        @click="handleSubmit"
-      >
-        {{ submitButtonText }}
-      </van-button>
     </div>
+    <PrimaryButton @click="handleSubmit">{{ submitButtonText }}</PrimaryButton>
   </div>
 </template>
 
 <style scoped lang="scss">
 .writing-test-view {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: #f1f2ff;
@@ -181,17 +173,8 @@ onUnmounted(() => {
   &__content {
     flex: 1;
     padding: 16px;
-    padding-bottom: calc(16px + 80px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-  }
-
-  &__submit-button {
-    height: 56px;
-    border-radius: 24px;
-    font-size: 16px;
-    font-weight: 900;
-    margin-top: 24px;
   }
 }
 </style>
