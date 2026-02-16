@@ -24,11 +24,11 @@
         </div>
       </div>
       <div class="mock-test-view__grid">
-        <div class="mock-test-view__grid-item" @click="navigateToListening">
+        <div class="mock-test-view__grid-item">
           <Icon name="listening-icon" size="40px" />
           <p class="mock-test-view__grid-item-title">Listening</p>
         </div>
-        <div class="mock-test-view__grid-item" @click="navigateToReading">
+        <div class="mock-test-view__grid-item">
           <Icon name="reading-icon" size="40px" />
           <p class="mock-test-view__grid-item-title">Reading</p>
         </div>
@@ -41,24 +41,37 @@
           <p class="mock-test-view__grid-item-title">Speaking</p>
         </div>
       </div>
-      <button class="mock-test-view__button">Start full test</button>
+      <button class="mock-test-view__button" :disabled="isLoading" @click="handleStartFullTest">
+        {{ isLoading ? 'Loading...' : 'Start full test' }}
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { showToast } from 'vant'
 import UserHeader from '@/components/common/UserHeader.vue'
+import { useAttemptStore } from '@/stores/useAttemptStore'
 
 const router = useRouter()
+const attemptStore = useAttemptStore()
 const points = 100
+const isLoading = ref(false)
 
-const navigateToListening = () => {
-  router.push({ name: 'listening-intro' })
-}
-
-const navigateToReading = () => {
-  router.push({ name: 'reading-intro' })
+const handleStartFullTest = async () => {
+  isLoading.value = true
+  try {
+    await attemptStore.initTest()
+    const section = attemptStore.currentSection ?? 'listening'
+    router.push({ name: `${section}-intro` })
+  } catch (error: any) {
+    const message = error?.response?.data?.message ?? error?.message ?? 'Failed to start test. Please try again.'
+    showToast({ message, type: 'fail' })
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
@@ -150,17 +163,7 @@ const navigateToReading = () => {
       padding: 16px;
       border-radius: 24px;
       background-color: var(--color-background-white);
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
-
-      &:active {
-        transform: translateY(0);
-      }
+      cursor: default;
 
       &-title {
         font-size: 16px;
@@ -179,6 +182,11 @@ const navigateToReading = () => {
     border-radius: 24px;
     font-size: 16px;
     font-weight: 900;
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
   }
 }
 </style>

@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router'
 import { showConfirmDialog, showToast } from 'vant'
 import { useListeningStore } from '@/stores/useListeningStore'
 import { useListeningTest } from '@/composables/useListeningTest'
+import { useAttemptStore } from '@/stores/useAttemptStore'
+import { upsertAnswers, advanceSection, formatListeningAnswers } from '@/services/testService'
 import AudioPlayer from '@/components/listening/AudioPlayer.vue'
 import Timer from '@/components/listening/Timer.vue'
 import PartIndicator from '@/components/listening/PartIndicator.vue'
@@ -12,6 +14,7 @@ import QuestionsList from '@/components/listening/QuestionsList.vue'
 
 const router = useRouter()
 const listeningStore = useListeningStore()
+const attemptStore = useAttemptStore()
 const { testData, fetchTestData } = useListeningTest()
 
 // Computed properties
@@ -71,16 +74,23 @@ const handleSubmit = async () => {
       cancelButtonText: 'Cancel',
     })
 
-    // Submit the test with testData
     listeningStore.submitTest(testData.value)
 
-    showToast({
-      message: 'Test submitted successfully!',
-      type: 'success',
-    })
-
-    // Navigate to results page
-    router.push({ name: 'listening-results' })
+    // If in full test flow, save answers and advance to next section
+    if (attemptStore.attemptId) {
+      try {
+        await upsertAnswers(attemptStore.attemptId, {
+          answers: formatListeningAnswers(listeningStore.answers),
+        })
+        await advanceSection(attemptStore.attemptId)
+      } catch (apiError) {
+        console.error('Failed to save listening answers:', apiError)
+      }
+      router.push({ name: 'reading-intro' })
+    } else {
+      showToast({ message: 'Test submitted successfully!', type: 'success' })
+      router.push({ name: 'listening-results' })
+    }
   } catch (error) {
     // User cancelled
     console.log('Submission cancelled')

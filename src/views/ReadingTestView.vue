@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router'
 import { showConfirmDialog, showToast } from 'vant'
 import { useReadingStore } from '@/stores/useReadingStore'
 import { useReadingTest } from '@/composables/useReadingTest'
+import { useAttemptStore } from '@/stores/useAttemptStore'
+import { upsertAnswers, advanceSection, formatListeningAnswers } from '@/services/testService'
 import Timer from '@/components/listening/Timer.vue'
 import PassageQuestionsTab from '@/components/reading/PassageQuestionsTab.vue'
 import ReadingPassage from '@/components/reading/ReadingPassage.vue'
@@ -11,6 +13,7 @@ import ReadingQuestionsList from '@/components/reading/ReadingQuestionsList.vue'
 
 const router = useRouter()
 const readingStore = useReadingStore()
+const attemptStore = useAttemptStore()
 const { testData, fetchTestData } = useReadingTest()
 
 // Computed properties
@@ -62,13 +65,21 @@ const handleSubmit = async () => {
 
       readingStore.submitTest(testData.value)
 
-      showToast({
-        message: 'Test submitted successfully!',
-        type: 'success',
-      })
-
-      // Navigate to mock-test page (results page deferred)
-      router.push({ name: 'mock-test' })
+      // If in full test flow, save answers and advance to next section
+      if (attemptStore.attemptId) {
+        try {
+          await upsertAnswers(attemptStore.attemptId, {
+            answers: formatListeningAnswers(readingStore.answers),
+          })
+          await advanceSection(attemptStore.attemptId)
+        } catch (apiError) {
+          console.error('Failed to save reading answers:', apiError)
+        }
+        router.push({ name: 'writing-intro' })
+      } else {
+        showToast({ message: 'Test submitted successfully!', type: 'success' })
+        router.push({ name: 'mock-test' })
+      }
     } catch {
       // User cancelled
       console.log('Submission cancelled')

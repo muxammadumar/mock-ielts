@@ -1,56 +1,51 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import UserHeader from '@/components/common/UserHeader.vue'
-import { useListeningStore } from '@/stores/useListeningStore'
-import { useAttemptStore } from '@/stores/useAttemptStore'
+import { useWritingStore } from '@/stores/useWritingStore'
 
 const router = useRouter()
-const listeningStore = useListeningStore()
-const attemptStore = useAttemptStore()
+const writingStore = useWritingStore()
 
 const points = 100
 
 const startTest = () => {
-  // Only reset test state if not in a full test flow
-  if (!attemptStore.attemptId) {
-    listeningStore.resetTest()
-  }
-  router.push({ name: 'listening-test' })
+  writingStore.resetTest()
+  router.push({ name: 'writing-test' })
 }
 </script>
 
 <template>
-  <div class="listening-intro-view">
+  <div class="writing-intro-view">
     <UserHeader :points="points" />
-    <div class="listening-intro-view__content">
-      <h1 class="listening-intro-view__title">IELTS Listening Test</h1>
-      <p class="listening-intro-view__subtitle">Enhance concentration + audio skills</p>
+    <div class="writing-intro-view__content">
+      <h1 class="writing-intro-view__title">IELTS Writing Test</h1>
+      <p class="writing-intro-view__subtitle">Develop your formal writing skills</p>
 
-      <div class="listening-intro-view__info-card">
-        <div class="listening-intro-view__info-item">
+      <div class="writing-intro-view__info-card">
+        <div class="writing-intro-view__info-item">
           <Icon name="book-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">40</p>
-            <p class="listening-intro-view__info-title">LISTENING QUESTIONS</p>
+          <div class="writing-intro-view__info-content">
+            <p class="writing-intro-view__info-value">Task 1 & Task 2</p>
+            <p class="writing-intro-view__info-title">FORMAL WRITING TASKS</p>
           </div>
         </div>
-        <div class="listening-intro-view__info-item">
+        <div class="writing-intro-view__info-item">
           <Icon name="time-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">30 mins + 10 mins</p>
-            <p class="listening-intro-view__info-title">AUDIO DURATION + TRANSFER TIME (SIMULATED)</p>
+          <div class="writing-intro-view__info-content">
+            <p class="writing-intro-view__info-value">60 mins</p>
+            <p class="writing-intro-view__info-title">TOTAL DURATION</p>
           </div>
         </div>
       </div>
 
-      <div class="listening-intro-view__rules-card">
-        <h3 class="listening-intro-view__rules-title">Before you start</h3>
-        <ul class="listening-intro-view__rules-list">
-          <li>You must wear headphones or be in a quiet place for clear audio.</li>
-          <li>Audio will play only once — just like in the real exam.</li>
-          <li>You cannot pause, rewind, or replay the audio.</li>
-          <li>Answers must be selected while listening; transfer time is included.</li>
-          <li>Your final score will be auto-calculated after submission.</li>
+      <div class="writing-intro-view__rules-card">
+        <h3 class="writing-intro-view__rules-title">Before you start</h3>
+        <ul class="writing-intro-view__rules-list">
+          <li>Task 1 requires at least 150 words; Task 2 requires at least 250 words.</li>
+          <li>You should spend about 20 minutes on Task 1 and 40 minutes on Task 2.</li>
+          <li>Task 2 carries more marks than Task 1, so manage your time wisely.</li>
+          <li>Write in a formal academic style; avoid informal language or contractions.</li>
+          <li>Your response will be assessed on task achievement, coherence, vocabulary, and grammar.</li>
         </ul>
       </div>
 
@@ -58,17 +53,17 @@ const startTest = () => {
         type="primary"
         block
         size="large"
-        class="listening-intro-view__start-button"
+        class="writing-intro-view__start-button"
         @click="startTest"
       >
-        Start listening test
+        Start writing test
       </van-button>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.listening-intro-view {
+.writing-intro-view {
   width: 100%;
   min-height: 100%;
   background-image: url('@/assets/images/home-bg.png');

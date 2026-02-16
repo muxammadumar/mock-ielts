@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import UserHeader from '@/components/common/UserHeader.vue'
-import { useListeningStore } from '@/stores/useListeningStore'
+import { useSpeakingStore } from '@/stores/useSpeakingStore'
 import { useAttemptStore } from '@/stores/useAttemptStore'
 
 const router = useRouter()
-const listeningStore = useListeningStore()
+const speakingStore = useSpeakingStore()
 const attemptStore = useAttemptStore()
 
 const points = 100
@@ -13,44 +13,44 @@ const points = 100
 const startTest = () => {
   // Only reset test state if not in a full test flow
   if (!attemptStore.attemptId) {
-    listeningStore.resetTest()
+    speakingStore.resetTest()
   }
-  router.push({ name: 'listening-test' })
+  router.push({ name: 'speaking-test' })
 }
 </script>
 
 <template>
-  <div class="listening-intro-view">
+  <div class="speaking-intro-view">
     <UserHeader :points="points" />
-    <div class="listening-intro-view__content">
-      <h1 class="listening-intro-view__title">IELTS Listening Test</h1>
-      <p class="listening-intro-view__subtitle">Enhance concentration + audio skills</p>
+    <div class="speaking-intro-view__content">
+      <h1 class="speaking-intro-view__title">IELTS Speaking Test</h1>
+      <p class="speaking-intro-view__subtitle">Practice your spoken English fluency</p>
 
-      <div class="listening-intro-view__info-card">
-        <div class="listening-intro-view__info-item">
+      <div class="speaking-intro-view__info-card">
+        <div class="speaking-intro-view__info-item">
           <Icon name="book-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">40</p>
-            <p class="listening-intro-view__info-title">LISTENING QUESTIONS</p>
+          <div class="speaking-intro-view__info-content">
+            <p class="speaking-intro-view__info-value">3 Parts</p>
+            <p class="speaking-intro-view__info-title">STRUCTURED INTERVIEW FORMAT</p>
           </div>
         </div>
-        <div class="listening-intro-view__info-item">
+        <div class="speaking-intro-view__info-item">
           <Icon name="time-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">30 mins + 10 mins</p>
-            <p class="listening-intro-view__info-title">AUDIO DURATION + TRANSFER TIME (SIMULATED)</p>
+          <div class="speaking-intro-view__info-content">
+            <p class="speaking-intro-view__info-value">11–14 mins</p>
+            <p class="speaking-intro-view__info-title">TOTAL DURATION</p>
           </div>
         </div>
       </div>
 
-      <div class="listening-intro-view__rules-card">
-        <h3 class="listening-intro-view__rules-title">Before you start</h3>
-        <ul class="listening-intro-view__rules-list">
-          <li>You must wear headphones or be in a quiet place for clear audio.</li>
-          <li>Audio will play only once — just like in the real exam.</li>
-          <li>You cannot pause, rewind, or replay the audio.</li>
-          <li>Answers must be selected while listening; transfer time is included.</li>
-          <li>Your final score will be auto-calculated after submission.</li>
+      <div class="speaking-intro-view__rules-card">
+        <h3 class="speaking-intro-view__rules-title">Before you start</h3>
+        <ul class="speaking-intro-view__rules-list">
+          <li>You have 2 minutes to answer each question — use the time fully.</li>
+          <li>Speak clearly and at a natural pace; avoid rushing or long silences.</li>
+          <li>Your microphone will be activated when you press the record button.</li>
+          <li>You can pause and resume recording, but cannot re-record a question once submitted.</li>
+          <li>You will be assessed on fluency, vocabulary, pronunciation, and grammar.</li>
         </ul>
       </div>
 
@@ -58,17 +58,17 @@ const startTest = () => {
         type="primary"
         block
         size="large"
-        class="listening-intro-view__start-button"
+        class="speaking-intro-view__start-button"
         @click="startTest"
       >
-        Start listening test
+        Start speaking test
       </van-button>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.listening-intro-view {
+.speaking-intro-view {
   width: 100%;
   min-height: 100%;
   background-image: url('@/assets/images/home-bg.png');

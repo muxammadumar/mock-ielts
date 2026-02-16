@@ -31,6 +31,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SkillScoreCard: typeof import('./src/components/home/SkillScoreCard.vue')['default']
+    SpeakingQuestionCard: typeof import('./src/components/speaking/SpeakingQuestionCard.vue')['default']
     Timer: typeof import('./src/components/listening/Timer.vue')['default']
     TimeRangeSelector: typeof import('./src/components/home/TimeRangeSelector.vue')['default']
     TrueFalseQuestion: typeof import('./src/components/listening/TrueFalseQuestion.vue')['default']
@@ -48,6 +49,9 @@ declare module 'vue' {
     VanSwipeItem: typeof import('vant/es')['SwipeItem']
     VanTab: typeof import('vant/es')['Tab']
     VanTabs: typeof import('vant/es')['Tabs']
+    VoiceRecorder: typeof import('./src/components/speaking/VoiceRecorder.vue')['default']
     WelcomeSlide: typeof import('./src/components/onboarding/WelcomeSlide.vue')['default']
+    WritingAnswerInput: typeof import('./src/components/writing/WritingAnswerInput.vue')['default']
+    WritingTaskCard: typeof import('./src/components/writing/WritingTaskCard.vue')['default']
   }
 }
