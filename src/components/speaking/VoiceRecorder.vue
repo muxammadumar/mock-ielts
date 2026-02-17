@@ -29,7 +29,6 @@ const formattedTime = computed(() => {
   return `${pad(h)}:${pad(m)}:${pad(s)}`
 })
 
-const hasRecording = computed(() => props.recordingState !== 'idle' || recordingSeconds.value > 0)
 
 const startRecordingTimer = () => {
   recordingInterval.value = window.setInterval(() => {

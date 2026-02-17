@@ -41,10 +41,10 @@
           <p class="mock-test-view__grid-item-title">Speaking</p>
         </div>
       </div>
+      <PrimaryButton :loading="isLoading" @click="handleStartFullTest">
+        Start full test
+      </PrimaryButton>
     </div>
-    <PrimaryButton :loading="isLoading" @click="handleStartFullTest">
-      Start full test
-    </PrimaryButton>
   </div>
 </template>
 
@@ -68,7 +68,8 @@ const handleStartFullTest = async () => {
     const section = attemptStore.currentSection ?? 'listening'
     router.push({ name: `${section}-intro` })
   } catch (error: any) {
-    const message = error?.response?.data?.message ?? error?.message ?? 'Failed to start test. Please try again.'
+    const message =
+      error?.response?.data?.message ?? error?.message ?? 'Failed to start test. Please try again.'
     showToast({ message, type: 'fail' })
   } finally {
     isLoading.value = false
@@ -174,5 +175,4 @@ const handleStartFullTest = async () => {
     }
   }
 }
-
 </style>

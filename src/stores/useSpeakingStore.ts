@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { showToast } from 'vant'
-import type { SpeakingAnswer, SpeakingTestResult, RecordingState } from '@/types/speaking'
+import type { SpeakingTestResult, RecordingState } from '@/types/speaking'
 
 export const useSpeakingStore = defineStore('speaking', () => {
   const router = useRouter()
