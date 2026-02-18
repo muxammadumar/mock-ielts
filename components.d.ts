@@ -33,6 +33,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     SkillScoreCard: typeof import('./src/components/home/SkillScoreCard.vue')['default']
     SpeakingQuestionCard: typeof import('./src/components/speaking/SpeakingQuestionCard.vue')['default']
+    TestIntroLayout: typeof import('./src/components/common/TestIntroLayout.vue')['default']
     TestNavHeader: typeof import('./src/components/common/TestNavHeader.vue')['default']
     Timer: typeof import('./src/components/listening/Timer.vue')['default']
     TimeRangeSelector: typeof import('./src/components/home/TimeRangeSelector.vue')['default']

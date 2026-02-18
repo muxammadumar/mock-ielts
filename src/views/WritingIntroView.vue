@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import TestNavHeader from '@/components/common/TestNavHeader.vue'
-import PrimaryButton from '@/components/common/PrimaryButton.vue'
+import TestIntroLayout from '@/components/common/TestIntroLayout.vue'
 import { useWritingStore } from '@/stores/useWritingStore'
 import { useAttemptStore } from '@/stores/useAttemptStore'
 
@@ -18,62 +17,41 @@ const startTest = () => {
 </script>
 
 <template>
-  <div class="writing-intro-view">
-    <TestNavHeader title="Writing test" @back="router.back()" />
-    <div class="writing-intro-view__content">
-      <div class="writing-intro-view__info-card">
-        <h1 class="writing-intro-view__card-title">IELTS Writing Test</h1>
-        <p class="writing-intro-view__card-subtitle">Develop your formal writing skills</p>
-        <div class="writing-intro-view__info-item">
-          <Icon name="book-gray" size="40px" />
-          <div class="writing-intro-view__info-content">
-            <p class="writing-intro-view__info-value">Task 1 & Task 2</p>
-            <p class="writing-intro-view__info-label">FORMAL WRITING TASKS</p>
-          </div>
-        </div>
-        <div class="writing-intro-view__info-item">
-          <Icon name="time-gray" size="40px" />
-          <div class="writing-intro-view__info-content">
-            <p class="writing-intro-view__info-value">60 mins</p>
-            <p class="writing-intro-view__info-label">TOTAL DURATION</p>
-          </div>
+  <TestIntroLayout title="Writing test" buttonText="Start writing test" @back="router.back()" @start="startTest">
+    <div class="writing-intro-view__info-card">
+      <h1 class="writing-intro-view__card-title">IELTS Writing Test</h1>
+      <p class="writing-intro-view__card-subtitle">Develop your formal writing skills</p>
+      <div class="writing-intro-view__info-item">
+        <Icon name="book-gray" size="40px" />
+        <div class="writing-intro-view__info-content">
+          <p class="writing-intro-view__info-value">Task 1 & Task 2</p>
+          <p class="writing-intro-view__info-label">FORMAL WRITING TASKS</p>
         </div>
       </div>
-
-      <div class="writing-intro-view__rules-card">
-        <h3 class="writing-intro-view__rules-title">Before you start</h3>
-        <ul class="writing-intro-view__rules-list">
-          <li>Task 1 requires at least 150 words; Task 2 requires at least 250 words.</li>
-          <li>You should spend about 20 minutes on Task 1 and 40 minutes on Task 2.</li>
-          <li>Task 2 carries more marks than Task 1, so manage your time wisely.</li>
-          <li>Write in a formal academic style; avoid informal language or contractions.</li>
-          <li>Your response will be assessed on task achievement, coherence, vocabulary, and grammar.</li>
-        </ul>
+      <div class="writing-intro-view__info-item">
+        <Icon name="time-gray" size="40px" />
+        <div class="writing-intro-view__info-content">
+          <p class="writing-intro-view__info-value">60 mins</p>
+          <p class="writing-intro-view__info-label">TOTAL DURATION</p>
+        </div>
       </div>
     </div>
 
-    <PrimaryButton @click="startTest">Start writing test</PrimaryButton>
-  </div>
+    <div class="writing-intro-view__rules-card">
+      <h3 class="writing-intro-view__rules-title">Before you start</h3>
+      <ul class="writing-intro-view__rules-list">
+        <li>Task 1 requires at least 150 words; Task 2 requires at least 250 words.</li>
+        <li>You should spend about 20 minutes on Task 1 and 40 minutes on Task 2.</li>
+        <li>Task 2 carries more marks than Task 1, so manage your time wisely.</li>
+        <li>Write in a formal academic style; avoid informal language or contractions.</li>
+        <li>Your response will be assessed on task achievement, coherence, vocabulary, and grammar.</li>
+      </ul>
+    </div>
+  </TestIntroLayout>
 </template>
 
 <style scoped lang="scss">
 .writing-intro-view {
-  width: 100%;
-  height: 100%;
-  background-color: #ede8f8;
-  display: flex;
-  flex-direction: column;
-
-  &__content {
-    flex: 1;
-    padding: 16px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
   &__info-card {
     background-color: #ffffff;
     border-radius: 24px;

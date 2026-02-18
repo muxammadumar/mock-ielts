@@ -35,19 +35,19 @@ const handleAnswerChange = (questionId: number, value: string | string[]) => {
         v-if="question.type === 'multiple-choice'"
         :question="question"
         :answer="answers[question.id]"
-        @answer-change="(value) => handleAnswerChange(question.id, value)"
+        @answer-change="value => handleAnswerChange(question.id, value)"
       />
       <ReadingFillInBlank
         v-else-if="question.type === 'fill-in-blank'"
         :question="question"
         :answer="answers[question.id]"
-        @answer-change="(value) => handleAnswerChange(question.id, value)"
+        @answer-change="value => handleAnswerChange(question.id, value)"
       />
       <TrueFalseQuestion
         v-else-if="question.type === 'true-false-ng'"
         :question="question"
         :answer="answers[question.id]"
-        @answer-change="(value) => handleAnswerChange(question.id, value)"
+        @answer-change="value => handleAnswerChange(question.id, value)"
       />
     </template>
   </div>
@@ -55,6 +55,9 @@ const handleAnswerChange = (questionId: number, value: string | string[]) => {
 
 <style scoped lang="scss">
 .reading-questions-list {
+  background-color: #fff;
+  border-radius: 24px;
+  padding: 20px;
   &__header {
     margin-bottom: 24px;
   }
