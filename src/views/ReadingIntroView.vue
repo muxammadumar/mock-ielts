@@ -17,7 +17,12 @@ const startTest = () => {
 </script>
 
 <template>
-  <TestIntroLayout title="Reading test" buttonText="Start reading test" @back="router.back()" @start="startTest">
+  <TestIntroLayout
+    title="Reading test"
+    buttonText="Start reading test"
+    @back="router.back()"
+    @start="startTest"
+  >
     <div class="reading-intro-view__info-card">
       <h1 class="reading-intro-view__card-title">IELTS Reading Test</h1>
       <p class="reading-intro-view__card-subtitle">Improve comprehension skills</p>
@@ -36,7 +41,7 @@ const startTest = () => {
         </div>
       </div>
       <div class="reading-intro-view__info-item">
-        <Icon name="rank-badge" size="40px" />
+        <Icon name="book-gray" size="40px" />
         <div class="reading-intro-view__info-content">
           <p class="reading-intro-view__info-value">True Band Estimate</p>
           <p class="reading-intro-view__info-label">BASED ON OFFICIAL IELTS CRITERIA</p>
@@ -80,7 +85,7 @@ const startTest = () => {
     font-size: 14px;
     font-weight: 400;
     color: #5c5c5c;
-    margin: -8px 0 0 0;
+    margin: -16px 0 0 0;
     line-height: 20px;
   }
 
@@ -105,10 +110,9 @@ const startTest = () => {
   }
 
   &__info-label {
-    font-size: 11px;
-    font-weight: 400;
+    font-size: 12px;
     color: #5c5c5c;
-    line-height: 14px;
+    line-height: 12px;
     margin: 0;
     text-transform: uppercase;
   }
@@ -132,13 +136,14 @@ const startTest = () => {
     padding-left: 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    list-style-type: disc;
 
     li {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 400;
       color: #5c5c5c;
-      line-height: 20px;
+      line-height: 24px;
+      letter-spacing: -1.5%;
     }
   }
 }

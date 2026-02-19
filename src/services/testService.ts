@@ -12,7 +12,7 @@ export interface UpsertAnswersDto {
     itemId: string
     answerText: string
     answerJson: object
-    audioFileId: string
+    audioFileId?: string
   }[]
   writings?: {
     taskKey: string
@@ -60,20 +60,23 @@ export const uploadAudioFile = async (blob: Blob): Promise<string> => {
 
 export const formatListeningAnswers = (
   answers: Record<number, { value: string | string[] }>,
+  questions: { id: number; itemId: string }[],
 ): UpsertAnswersDto['answers'] => {
-  return Object.entries(answers).map(([id, ans]) => ({
-    itemId: String(id),
-    answerText: Array.isArray(ans.value) ? ans.value.join(',') : ans.value,
-    answerJson: {},
-    audioFileId: '',
-  }))
+  return Object.entries(answers).map(([id, ans]) => {
+    const q = questions.find((q) => q.id === Number(id))
+    return {
+      itemId: q?.itemId ?? String(id),
+      answerText: Array.isArray(ans.value) ? ans.value.join(',') : ans.value,
+      answerJson: {},
+    }
+  })
 }
 
 export const formatWritingAnswers = (
-  answers: Record<number, { value: string }>,
+  answers: Record<string, { value: string }>,
 ): UpsertAnswersDto['writings'] => {
-  return Object.entries(answers).map(([taskId, ans]) => ({
-    taskKey: taskId,
+  return Object.entries(answers).map(([taskKey, ans]) => ({
+    taskKey,
     text: ans.value,
   }))
 }
@@ -81,11 +84,15 @@ export const formatWritingAnswers = (
 export const formatSpeakingAnswers = (
   recordings: { questionId: number; blob: Blob | null }[],
   uploadedFileIds: string[],
+  questions: { id: number; itemId: string }[],
 ): UpsertAnswersDto['answers'] => {
-  return recordings.map((rec, i) => ({
-    itemId: String(rec.questionId),
-    answerText: '',
-    answerJson: {},
-    audioFileId: uploadedFileIds[i] ?? '',
-  }))
+  return recordings.map((rec, i) => {
+    const q = questions.find((q) => q.id === rec.questionId)
+    return {
+      itemId: q?.itemId ?? String(rec.questionId),
+      answerText: '',
+      answerJson: {},
+      ...(uploadedFileIds[i] ? { audioFileId: uploadedFileIds[i] } : {}),
+    }
+  })
 }

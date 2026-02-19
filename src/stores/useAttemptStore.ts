@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { getPublishedTests, getTestStructure, startAttempt, advanceSection, submitAttempt, getAttemptResult } from '@/services/testService'
 
+const PERSIST_KEY = 'mock_ielts_attempt'
+
 export const useAttemptStore = defineStore('attempt', () => {
   const attemptId = ref<string | null>(null)
   const testId = ref<string | null>(null)
@@ -9,7 +11,46 @@ export const useAttemptStore = defineStore('attempt', () => {
   const currentSection = ref<'listening' | 'reading' | 'writing' | 'speaking' | null>(null)
   const result = ref<any | null>(null)
 
+  const persist = () => {
+    try {
+      localStorage.setItem(
+        PERSIST_KEY,
+        JSON.stringify({
+          attemptId: attemptId.value,
+          testId: testId.value,
+          testStructure: testStructure.value,
+          currentSection: currentSection.value,
+        }),
+      )
+    } catch {
+      // localStorage unavailable or full
+    }
+  }
+
+  const hydrate = (): boolean => {
+    try {
+      const raw = localStorage.getItem(PERSIST_KEY)
+      if (!raw) return false
+      const data = JSON.parse(raw)
+      if (!data.attemptId || !data.testStructure) return false
+      attemptId.value = data.attemptId
+      testId.value = data.testId ?? null
+      testStructure.value = data.testStructure
+      currentSection.value = data.currentSection ?? null
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  const clearPersisted = () => {
+    localStorage.removeItem(PERSIST_KEY)
+  }
+
   const initTest = async () => {
+    // Restore from localStorage if a valid attempt already exists
+    if (hydrate()) return
+
     // 1. Fetch published tests — response shape: { data: [{ id, title, ... }] }
     const testsResponse: any = await getPublishedTests()
     const tests: any[] = testsResponse?.data ?? []
@@ -37,6 +78,8 @@ export const useAttemptStore = defineStore('attempt', () => {
     currentSection.value = apiSection
       ? (apiSection.toLowerCase() as 'listening' | 'reading' | 'writing' | 'speaking')
       : 'listening'
+
+    persist()
   }
 
   const advance = async () => {
@@ -55,6 +98,7 @@ export const useAttemptStore = defineStore('attempt', () => {
   }
 
   const reset = () => {
+    clearPersisted()
     attemptId.value = null
     testId.value = null
     testStructure.value = null
@@ -73,5 +117,8 @@ export const useAttemptStore = defineStore('attempt', () => {
     submit,
     getResult,
     reset,
+    persist,
+    hydrate,
+    clearPersisted,
   }
 })

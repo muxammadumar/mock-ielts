@@ -23,10 +23,9 @@ defineEmits<{ back: [] }>()
 .test-nav-header {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  padding: 24px 16px;
   gap: 8px;
   background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   flex-shrink: 0;
@@ -51,11 +50,11 @@ defineEmits<{ back: [] }>()
     font-weight: 700;
     color: #171717;
     margin: 0;
-    line-height: 24px;
+    line-height: 22px;
   }
 
   &__spacer {
-    width: 36px;
+    width: 40px;
     flex-shrink: 0;
   }
 }

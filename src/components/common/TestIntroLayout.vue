@@ -35,7 +35,7 @@ defineEmits<{ back: []; start: [] }>()
 .test-intro-layout {
   width: 100%;
   height: 100%;
-  background-color: #ede8f8;
+  background-color: #f1f2ff;
   display: flex;
   flex-direction: column;
 

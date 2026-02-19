@@ -9,7 +9,7 @@ export const useWritingStore = defineStore('writing', () => {
 
   // State
   const currentTaskIndex = ref<0 | 1>(0)
-  const answers = ref<Record<number, WritingAnswer>>({})
+  const answers = ref<Record<string, WritingAnswer>>({})
   const timeRemaining = ref(60 * 60)
   const hasStarted = ref(false)
   const timerInterval = ref<number | null>(null)
@@ -20,12 +20,12 @@ export const useWritingStore = defineStore('writing', () => {
   const totalAnswered = computed(() => Object.keys(answers.value).length)
 
   // Actions
-  const setAnswer = (taskId: number, value: string) => {
-    answers.value[taskId] = { taskId, value }
+  const setAnswer = (taskKey: string, value: string) => {
+    answers.value[taskKey] = { taskKey, value }
   }
 
-  const getAnswer = (taskId: number): WritingAnswer | undefined => {
-    return answers.value[taskId]
+  const getAnswer = (taskKey: string): WritingAnswer | undefined => {
+    return answers.value[taskKey]
   }
 
   const advanceToNextTask = () => {

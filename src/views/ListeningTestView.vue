@@ -20,10 +20,12 @@ const { testData, fetchTestData } = useListeningTest()
 
 // Computed properties
 const currentPartData = computed(() => {
+  if (!testData.value) return null
   return testData.value.parts[listeningStore.currentPartIndex] || testData.value.parts[0]
 })
 
 const partTitle = computed(() => {
+  if (!currentPartData.value) return 'Listening'
   return `Listening · Part ${currentPartData.value.partNumber}`
 })
 
@@ -70,18 +72,19 @@ const handleSubmit = async () => {
   try {
     await showConfirmDialog({
       title: 'Submit Test',
-      message: `You have answered ${listeningStore.totalAnswered} out of ${testData.value.totalQuestions} questions. Do you want to submit?`,
+      message: `You have answered ${listeningStore.totalAnswered} out of ${testData.value?.totalQuestions ?? 0} questions. Do you want to submit?`,
       confirmButtonText: 'Submit',
       cancelButtonText: 'Cancel',
     })
 
-    listeningStore.submitTest(testData.value)
+    listeningStore.submitTest(testData.value!)
 
     // If in full test flow, save answers and advance to next section
     if (attemptStore.attemptId) {
       try {
+        const allQuestions = testData.value?.parts.flatMap((p) => p.questions) ?? []
         await upsertAnswers(attemptStore.attemptId, {
-          answers: formatListeningAnswers(listeningStore.answers),
+          answers: formatListeningAnswers(listeningStore.answers, allQuestions),
         })
         await advanceSection(attemptStore.attemptId)
       } catch (apiError) {
@@ -110,7 +113,9 @@ const handleBeforeUnload = (e: BeforeUnloadEvent) => {
 // Lifecycle
 onMounted(async () => {
   await fetchTestData()
-  listeningStore.startTimer(testData.value)
+  if (testData.value) {
+    listeningStore.startTimer(testData.value)
+  }
   window.addEventListener('beforeunload', handleBeforeUnload)
 })
 
@@ -131,9 +136,9 @@ onUnmounted(() => {
       <Timer :time-remaining="listeningStore.timeRemaining" />
     </div>
 
-    <div class="listening-test-view__content">
+    <div v-if="testData && currentPartData" class="listening-test-view__content">
       <AudioPlayer
-        :audio-url="testData.audioUrl"
+        :audio-url="currentPartData?.audioUrl ?? testData.audioUrl"
         :control-mode="testData.audioControlMode"
         @play="handlePlay"
         @pause="handlePause"

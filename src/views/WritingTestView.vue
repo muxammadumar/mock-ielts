@@ -16,16 +16,16 @@ const writingStore = useWritingStore()
 const attemptStore = useAttemptStore()
 const { testData, fetchTestData } = useWritingTest()
 
-const currentTask = computed(() => testData.value.tasks[writingStore.currentTaskIndex])
+const currentTask = computed(() => testData.value?.tasks[writingStore.currentTaskIndex] ?? null)
 
 const taskTitle = computed(() => `Writing · Part ${writingStore.currentTaskIndex + 1}/2`)
 
 const submitButtonText = computed(() => (writingStore.isLastTask ? 'Submit' : 'Next Task'))
 
-const currentAnswer = computed(() => writingStore.getAnswer(currentTask.value?.id)?.value ?? '')
+const currentAnswer = computed(() => writingStore.getAnswer(currentTask.value?.taskKey)?.value ?? '')
 
 const handleAnswerChange = (value: string) => {
-  writingStore.setAnswer(currentTask.value.id, value)
+  writingStore.setAnswer(currentTask.value.taskKey, value)
 }
 
 const handleBack = async () => {
@@ -92,7 +92,9 @@ const handleBeforeUnload = (e: BeforeUnloadEvent) => {
 
 onMounted(async () => {
   await fetchTestData()
-  writingStore.startTimer()
+  if (testData.value) {
+    writingStore.startTimer()
+  }
   window.addEventListener('beforeunload', handleBeforeUnload)
 })
 

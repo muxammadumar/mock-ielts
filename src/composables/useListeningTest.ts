@@ -1,11 +1,11 @@
 import { ref } from 'vue'
 import type { ListeningTest } from '@/types/listening'
-import { mockListeningTest } from '@/data/listeningTestData'
 import { useAttemptStore } from '@/stores/useAttemptStore'
+import { transformListeningSection } from '@/utils/sectionTransformers'
 
 export const useListeningTest = () => {
   const isLoading = ref(false)
-  const testData = ref<ListeningTest>(mockListeningTest)
+  const testData = ref<ListeningTest | null>(null)
 
   const fetchTestData = async () => {
     isLoading.value = true
@@ -14,22 +14,15 @@ export const useListeningTest = () => {
       const structure = attemptStore.testStructure
 
       if (structure) {
-        // Try to extract listening section from the API structure
         const listeningSection =
-          structure.sections?.find((s: any) => s.sectionType === 'LISTENING') ??
-          null
+          structure.sections?.find((s: any) => s.sectionType === 'LISTENING') ?? null
 
         if (listeningSection) {
-          testData.value = listeningSection as ListeningTest
-          return
+          testData.value = transformListeningSection(listeningSection)
         }
       }
-
-      // Fall back to mock data
-      testData.value = mockListeningTest
     } catch (error) {
       console.error('Error fetching listening test:', error)
-      testData.value = mockListeningTest
     } finally {
       isLoading.value = false
     }

@@ -26,19 +26,21 @@ const selectedValue = computed({
 
 <template>
   <div class="reading-mc">
-    <p class="reading-mc__text">
+    <div class="reading-mc__text-content">
       <span class="reading-mc__number">{{ question.id }}.</span>
-      {{ question.question }}
-    </p>
-    <div class="reading-mc__grid">
+      <p class="reading-mc__text">{{ question.question }}</p>
+    </div>
+    <div class="reading-mc__options">
       <button
         v-for="option in question.options"
         :key="option.value"
-        class="reading-mc__option"
-        :class="{ 'reading-mc__option--selected': selectedValue === option.value }"
+        class="option-pill"
+        :class="{ 'option-pill--selected': selectedValue === option.value }"
         @click="selectedValue = option.value"
       >
-        {{ option.value }}
+        <span class="option-pill__label">{{ option.label }}</span>
+        <Icon name="checked" size="24px" color="#fff" v-if="selectedValue === option.value" />
+        <Icon v-else name="check" size="24px" color="#fff" />
       </button>
     </div>
   </div>
@@ -48,52 +50,61 @@ const selectedValue = computed({
 .reading-mc {
   margin-bottom: 24px;
 
+  &__text-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  &__number {
+    font-size: 15px;
+    font-weight: 600;
+    color: #171717;
+    flex-shrink: 0;
+  }
+
   &__text {
     font-size: 18px;
     font-weight: 600;
     color: #171717;
     line-height: 28px;
-    margin: 0 0 16px 0;
+    margin: 0;
     letter-spacing: -0.015em;
     text-align: justify;
   }
 
-  &__number {
+  &__options {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+}
+
+.option-pill {
+  width: calc(calc(100% / 3) - 8px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+
+  &:active {
+    background: #ede8fa;
+  }
+
+  &__label {
+    font-size: 16px;
+    line-height: 24px;
     font-weight: 600;
     color: #171717;
-  }
-
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-
-  &__option {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    height: 48px;
-    border-radius: 12px;
-    border: 2px solid #e0e0e0;
-    background: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    color: #333;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:active {
-      transform: scale(0.96);
-    }
-
-    &--selected {
-      border-color: var(--color-primary);
-      background-color: var(--color-primary);
-      color: #fff;
-    }
   }
 }
 </style>

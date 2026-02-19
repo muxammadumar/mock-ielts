@@ -27,6 +27,8 @@ defineEmits<{ click: [] }>()
 
 <style scoped lang="scss">
 .primary-button-wrapper {
+  width: 100%;
+  padding: 0 16px;
   flex-shrink: 0;
   padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
 }

@@ -19,10 +19,10 @@ const { testData, fetchTestData } = useSpeakingTest()
 const showFinishDialog = ref(false)
 const isAnalyzing = ref(false)
 
-const allQuestions = computed(() => testData.value.parts.flatMap((p) => p.questions))
+const allQuestions = computed(() => testData.value?.parts.flatMap((p) => p.questions) ?? [])
 const currentQuestion = computed(() => allQuestions.value[speakingStore.currentQuestionIndex])
 const currentPart = computed(() =>
-  testData.value.parts.find((p) =>
+  testData.value?.parts.find((p) =>
     p.questions.some((q) => q.id === currentQuestion.value?.id),
   ),
 )
@@ -82,7 +82,7 @@ const handleSubmit = async () => {
       try {
         await showConfirmDialog({
           title: 'Submit Test',
-          message: `You have answered ${speakingStore.questionsAnswered} out of ${testData.value.totalQuestions} questions. Do you want to submit?`,
+          message: `You have answered ${speakingStore.questionsAnswered} out of ${testData.value?.totalQuestions ?? 0} questions. Do you want to submit?`,
           confirmButtonText: 'Submit',
           cancelButtonText: 'Cancel',
         })
@@ -127,7 +127,7 @@ const handleFinishSubmit = async () => {
     )
 
     await upsertAnswers(attemptStore.attemptId!, {
-      answers: formatSpeakingAnswers(recordingEntries, fileIds),
+      answers: formatSpeakingAnswers(recordingEntries, fileIds, questions),
     })
     await submitAttempt(attemptStore.attemptId!)
     const apiResult = await getAttemptResult(attemptStore.attemptId!)
@@ -154,7 +154,9 @@ const handleBeforeUnload = (e: BeforeUnloadEvent) => {
 
 onMounted(async () => {
   await fetchTestData()
-  speakingStore.totalQuestions = testData.value.totalQuestions
+  if (testData.value) {
+    speakingStore.totalQuestions = testData.value.totalQuestions
+  }
   speakingStore.startQuestionTimer()
   window.addEventListener('beforeunload', handleBeforeUnload)
 })
@@ -179,7 +181,7 @@ onUnmounted(() => {
       <SpeakingQuestionCard
         :question="currentQuestion"
         :part-number="currentPart?.partNumber ?? 1"
-        :total-questions="testData.totalQuestions"
+        :total-questions="testData?.totalQuestions ?? 0"
       />
 
       <VoiceRecorder

@@ -19,10 +19,12 @@ const { testData, fetchTestData } = useReadingTest()
 
 // Computed properties
 const currentPartData = computed(() => {
+  if (!testData.value) return null
   return testData.value.parts[readingStore.currentPartIndex] || testData.value.parts[0]
 })
 
 const partTitle = computed(() => {
+  if (!currentPartData.value) return 'Reading'
   return `Reading · Part ${currentPartData.value.partNumber}`
 })
 
@@ -59,18 +61,19 @@ const handleSubmit = async () => {
     try {
       await showConfirmDialog({
         title: 'Submit Test',
-        message: `You have answered ${readingStore.totalAnswered} out of ${testData.value.totalQuestions} questions. Do you want to submit?`,
+        message: `You have answered ${readingStore.totalAnswered} out of ${testData.value?.totalQuestions ?? 0} questions. Do you want to submit?`,
         confirmButtonText: 'Submit',
         cancelButtonText: 'Cancel',
       })
 
-      readingStore.submitTest(testData.value)
+      readingStore.submitTest(testData.value!)
 
       // If in full test flow, save answers and advance to next section
       if (attemptStore.attemptId) {
         try {
+          const allQuestions = testData.value?.parts.flatMap(p => p.questions) ?? []
           await upsertAnswers(attemptStore.attemptId, {
-            answers: formatListeningAnswers(readingStore.answers),
+            answers: formatListeningAnswers(readingStore.answers, allQuestions),
           })
           await advanceSection(attemptStore.attemptId)
         } catch (apiError) {
@@ -105,7 +108,9 @@ const handleBeforeUnload = (e: BeforeUnloadEvent) => {
 // Lifecycle
 onMounted(async () => {
   await fetchTestData()
-  readingStore.startTimer(testData.value)
+  if (testData.value) {
+    readingStore.startTimer(testData.value)
+  }
   window.addEventListener('beforeunload', handleBeforeUnload)
 })
 
@@ -122,7 +127,7 @@ onUnmounted(() => {
         <Icon name="arrow-left" size="24px" color="#171717" />
       </button>
       <span class="reading-test-view__title">{{ partTitle }}</span>
-      <Timer :time-remaining="readingStore.timeRemaining" />
+      <Timer class="reading-test-view__timer" :time-remaining="readingStore.timeRemaining" />
     </div>
 
     <div class="reading-test-view__tabs">
@@ -132,7 +137,7 @@ onUnmounted(() => {
       />
     </div>
 
-    <div class="reading-test-view__content">
+    <div v-if="currentPartData" class="reading-test-view__content">
       <!-- Passage View -->
       <ReadingPassage
         v-if="readingStore.activeTab === 'passage'"
@@ -151,7 +156,9 @@ onUnmounted(() => {
         />
       </template>
     </div>
-    <PrimaryButton v-if="readingStore.activeTab !== 'passage'" @click="handleSubmit">{{ submitButtonText }}</PrimaryButton>
+    <PrimaryButton v-if="readingStore.activeTab !== 'passage'" @click="handleSubmit">{{
+      submitButtonText
+    }}</PrimaryButton>
   </div>
 </template>
 
@@ -167,9 +174,8 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
+    padding: 24px 16px;
     background-color: var(--color-background-white);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     position: sticky;
     top: 0;
     z-index: 10;
@@ -187,17 +193,25 @@ onUnmounted(() => {
     border: none;
     cursor: pointer;
     padding: 0;
+    margin-right: 40px;
   }
 
   &__title {
     flex: 1;
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--color-text-primary);
     text-align: center;
     padding: 0 8px;
     letter-spacing: -0.025em;
     line-height: 22px;
+  }
+
+  &__timer {
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &__tabs {
@@ -214,6 +228,5 @@ onUnmounted(() => {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
-
 }
 </style>
