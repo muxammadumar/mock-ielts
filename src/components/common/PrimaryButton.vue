@@ -1,19 +1,10 @@
 <template>
   <div v-if="!inline" class="primary-button-wrapper">
-    <button
-      class="primary-button"
-      :disabled="disabled || loading"
-      @click="$emit('click')"
-    >
+    <button class="primary-button" :disabled="disabled || loading" @click="$emit('click')">
       <slot>{{ loading ? 'Loading...' : '' }}</slot>
     </button>
   </div>
-  <button
-    v-else
-    class="primary-button"
-    :disabled="disabled || loading"
-    @click="$emit('click')"
-  >
+  <button v-else class="primary-button" :disabled="disabled || loading" @click="$emit('click')">
     <slot>{{ loading ? 'Loading...' : '' }}</slot>
   </button>
 </template>
@@ -36,8 +27,9 @@ defineEmits<{ click: [] }>()
 
 <style scoped lang="scss">
 .primary-button-wrapper {
+  width: 100%;
+  padding: 0 16px;
   flex-shrink: 0;
-  padding: 16px;
   padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
 }
 

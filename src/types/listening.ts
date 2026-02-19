@@ -4,6 +4,7 @@ export type AudioControlMode = 'practice' | 'exam'
 
 export interface BaseQuestion {
   id: number
+  itemId: string
   type: QuestionType
   question: string
   correctAnswer: string | string[]
@@ -32,6 +33,7 @@ export interface TestPart {
   title: string // e.g., "PART 1"
   subtitle: string // e.g., "QUESTIONS 1-10"
   questions: Question[]
+  audioUrl?: string // Per-part audio URL from media[]
   audioStartTime?: number // Optional: timestamp when this part starts in the audio
   audioEndTime?: number // Optional: timestamp when this part ends
 }

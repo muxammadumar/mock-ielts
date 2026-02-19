@@ -1,5 +1,6 @@
 export interface SpeakingQuestion {
   id: number
+  itemId: string
   questionNumber: number
   topic: string
   question: string

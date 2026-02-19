@@ -1,3 +1,28 @@
+<template>
+  <div class="multiple-choice-question">
+    <div v-if="question.id === 11" class="multiple-choice-question__instruction">
+      {{ instruction }}
+    </div>
+    <div class="multiple-choice-question__text-content">
+      <div class="multiple-choice-question__number">{{ question.id }}.</div>
+      <p class="multiple-choice-question__text">{{ question.question }}</p>
+    </div>
+    <div class="multiple-choice-question__options">
+      <button
+        v-for="option in question.options"
+        :key="option.value"
+        class="option-pill"
+        :class="{ 'option-pill--selected': selectedValue === option.value }"
+        @click="selectedValue = option.value"
+      >
+        <span class="option-pill__label">{{ option.label }}</span>
+        <Icon name="checked" size="24px" color="#fff" v-if="selectedValue === option.value" />
+        <Icon v-else name="check" size="24px" color="#fff" />
+      </button>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { MultipleChoiceQuestion, Answer } from '@/types/listening'
@@ -23,38 +48,9 @@ const selectedValue = computed({
   },
 })
 
-const instruction = 'Complete the notes below. Write no more than two words and/or a number for each answer.'
+const instruction =
+  'Complete the notes below. Write no more than two words and/or a number for each answer.'
 </script>
-
-<template>
-  <div class="multiple-choice-question">
-    <div v-if="question.id === 11" class="multiple-choice-question__instruction">
-      {{ instruction }}
-    </div>
-    <div class="multiple-choice-question__number">{{ question.id }}.</div>
-    <div class="multiple-choice-question__content">
-      <p class="multiple-choice-question__text">{{ question.question }}</p>
-      <van-radio-group v-model="selectedValue" class="multiple-choice-question__options">
-        <div
-          v-for="option in question.options"
-          :key="option.value"
-          class="multiple-choice-question__option"
-        >
-          <van-radio
-            :name="option.value"
-            class="multiple-choice-question__radio"
-            icon-size="20px"
-          >
-            <div class="multiple-choice-question__option-content">
-              <span class="multiple-choice-question__option-value">{{ option.value }}</span>
-              <span class="multiple-choice-question__option-label">{{ option.label }}</span>
-            </div>
-          </van-radio>
-        </div>
-      </van-radio-group>
-    </div>
-  </div>
-</template>
 
 <style scoped lang="scss">
 .multiple-choice-question {
@@ -72,22 +68,24 @@ const instruction = 'Complete the notes below. Write no more than two words and/
     border-bottom: 1px solid #f0f0f0;
   }
 
+  &__text-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
   &__number {
     font-size: 15px;
     font-weight: 600;
-    color: var(--color-primary);
-    margin-bottom: 8px;
-  }
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    color: #171717;
+    flex-shrink: 0;
   }
 
   &__text {
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 600;
     color: var(--color-text-primary);
     margin: 0;
   }
@@ -97,51 +95,31 @@ const instruction = 'Complete the notes below. Write no more than two words and/
     flex-direction: column;
     gap: 8px;
   }
+}
 
-  &__option {
-    padding: 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+.option-pill {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
 
-    &:hover {
-      background-color: #fafafa;
-    }
+  &:active {
+    background: #ede8fa;
   }
 
-  &__radio {
-    width: 100%;
-
-    :deep(.van-radio__label) {
-      flex: 1;
-      margin-left: 8px;
-    }
-  }
-
-  &__option-content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  &__option-value {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    background-color: #f5f5f5;
-    border-radius: 50%;
-    font-size: 13px;
+  &__label {
+    font-size: 16px;
+    line-height: 24px;
     font-weight: 600;
-    color: var(--color-text-primary);
-    flex-shrink: 0;
-  }
-
-  &__option-label {
-    font-size: 14px;
-    color: var(--color-text-primary);
-    line-height: 1.5;
+    color: #171717;
   }
 }
 </style>

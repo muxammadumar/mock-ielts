@@ -1,3 +1,27 @@
+<template>
+  <div class="true-false-question">
+    <div class="true-false-question__text-content">
+      <div class="true-false-question__number">{{ question.id }}.</div>
+      <p class="true-false-question__text">{{ question.question }}</p>
+    </div>
+    <div class="true-false-question__content">
+      <div class="true-false-question__options">
+        <button
+          v-for="option in options"
+          :key="option.value"
+          class="option-pill"
+          :class="{ 'option-pill--selected': selectedValue === option.value }"
+          @click="selectedValue = option.value"
+        >
+          <span class="option-pill__label">{{ option.label }}</span>
+          <Icon name="checked" size="24px" color="#fff" v-if="selectedValue === option.value" />
+          <Icon v-else name="check" size="24px" color="#fff" />
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { TrueFalseQuestion, Answer } from '@/types/listening'
@@ -28,44 +52,12 @@ const options = [
   { value: 'false', label: 'False' },
   { value: 'ng', label: 'NG' },
 ]
-
-const instruction = 'Complete the notes below. Write no more than two words and/or a number for each answer.'
 </script>
-
-<template>
-  <div class="true-false-question">
-    <div v-if="question.id === 21" class="true-false-question__instruction">
-      {{ instruction }}
-    </div>
-    <div class="true-false-question__number">{{ question.id }}.</div>
-    <div class="true-false-question__content">
-      <p class="true-false-question__text">{{ question.question }}</p>
-      <van-radio-group v-model="selectedValue" class="true-false-question__options">
-        <div
-          v-for="option in options"
-          :key="option.value"
-          class="true-false-question__option"
-        >
-          <van-radio
-            :name="option.value"
-            class="true-false-question__radio"
-            icon-size="20px"
-          >
-            {{ option.label }}
-          </van-radio>
-        </div>
-      </van-radio-group>
-    </div>
-  </div>
-</template>
+˝
 
 <style scoped lang="scss">
 .true-false-question {
   margin-bottom: 24px;
-  padding: 16px;
-  background-color: var(--color-background-white);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 
   &__instruction {
     font-size: 13px;
@@ -75,10 +67,17 @@ const instruction = 'Complete the notes below. Write no more than two words and/
     border-bottom: 1px solid #f0f0f0;
   }
 
+  &__text-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
   &__number {
     font-size: 15px;
     font-weight: 600;
-    color: var(--color-primary);
+    color: #171717;
     margin-bottom: 8px;
   }
 
@@ -89,8 +88,9 @@ const instruction = 'Complete the notes below. Write no more than two words and/
   }
 
   &__text {
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 600;
     color: var(--color-text-primary);
     margin: 0;
   }
@@ -99,31 +99,61 @@ const instruction = 'Complete the notes below. Write no more than two words and/
     display: flex;
     flex-direction: row;
     gap: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+  }
+}
+
+.option-pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+
+  &:active {
+    background: #ede8fa;
   }
 
-  &__option {
-    flex: 1;
-    min-width: 90px;
-    padding: 12px 16px;
-    border: 1px solid #e0e0e0;
-    border-radius: 20px;
-    transition: all 0.2s ease;
-    text-align: center;
-
-    &:hover {
-      background-color: #fafafa;
-    }
+  &__label {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+    color: #171717;
+    line-height: 1.4;
   }
 
-  &__radio {
-    width: 100%;
-    justify-content: center;
+  &__indicator {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid #d0d0d0;
+    background: #fff;
+    position: relative;
+  }
 
-    :deep(.van-radio__label) {
-      margin-left: 6px;
-      font-size: 14px;
-      font-weight: 500;
+  &--selected &__indicator {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 6px;
+      width: 6px;
+      height: 10px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
     }
   }
 }

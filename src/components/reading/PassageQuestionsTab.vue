@@ -34,7 +34,7 @@ const emit = defineEmits<{
 <style scoped lang="scss">
 .passage-questions-tab {
   display: flex;
-  background-color: #f0f0f5;
+  background-color: #ffffff;
   border-radius: 100px;
   padding: 4px;
 
@@ -54,8 +54,8 @@ const emit = defineEmits<{
     &--active {
       background-color: #fff;
       color: var(--color-primary);
-      font-weight: 700;
-      font-size: 17px;
+      // font-weight: 700;
+      // font-size: 17px;
       box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
     }
   }

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import TestNavHeader from '@/components/common/TestNavHeader.vue'
-import PrimaryButton from '@/components/common/PrimaryButton.vue'
+import TestIntroLayout from '@/components/common/TestIntroLayout.vue'
 import { useListeningStore } from '@/stores/useListeningStore'
 import { useAttemptStore } from '@/stores/useAttemptStore'
 
@@ -18,62 +17,41 @@ const startTest = () => {
 </script>
 
 <template>
-  <div class="listening-intro-view">
-    <TestNavHeader title="Listening test" @back="router.back()" />
-    <div class="listening-intro-view__content">
-      <div class="listening-intro-view__info-card">
-        <h1 class="listening-intro-view__card-title">IELTS Listening Test</h1>
-        <p class="listening-intro-view__card-subtitle">Enhance concentration + audio skills</p>
-        <div class="listening-intro-view__info-item">
-          <Icon name="book-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">40</p>
-            <p class="listening-intro-view__info-label">LISTENING QUESTIONS</p>
-          </div>
-        </div>
-        <div class="listening-intro-view__info-item">
-          <Icon name="time-gray" size="40px" />
-          <div class="listening-intro-view__info-content">
-            <p class="listening-intro-view__info-value">30 mins + 10 mins</p>
-            <p class="listening-intro-view__info-label">AUDIO DURATION + TRANSFER TIME (SIMULATED)</p>
-          </div>
+  <TestIntroLayout title="Listening test" buttonText="Start listening test" @back="router.back()" @start="startTest">
+    <div class="listening-intro-view__info-card">
+      <h1 class="listening-intro-view__card-title">IELTS Listening Test</h1>
+      <p class="listening-intro-view__card-subtitle">Enhance concentration + audio skills</p>
+      <div class="listening-intro-view__info-item">
+        <Icon name="book-gray" size="40px" />
+        <div class="listening-intro-view__info-content">
+          <p class="listening-intro-view__info-value">40</p>
+          <p class="listening-intro-view__info-label">LISTENING QUESTIONS</p>
         </div>
       </div>
-
-      <div class="listening-intro-view__rules-card">
-        <h3 class="listening-intro-view__rules-title">Before you start</h3>
-        <ul class="listening-intro-view__rules-list">
-          <li>You must wear headphones or be in a quiet place for clear audio.</li>
-          <li>Audio will play only once — just like in the real exam.</li>
-          <li>You cannot pause, rewind, or replay the audio.</li>
-          <li>Answers must be selected while listening; transfer time is included.</li>
-          <li>Your final score will be auto-calculated after submission.</li>
-        </ul>
+      <div class="listening-intro-view__info-item">
+        <Icon name="time-gray" size="40px" />
+        <div class="listening-intro-view__info-content">
+          <p class="listening-intro-view__info-value">30 mins + 10 mins</p>
+          <p class="listening-intro-view__info-label">AUDIO DURATION + TRANSFER TIME (SIMULATED)</p>
+        </div>
       </div>
     </div>
 
-    <PrimaryButton @click="startTest">Start listening test</PrimaryButton>
-  </div>
+    <div class="listening-intro-view__rules-card">
+      <h3 class="listening-intro-view__rules-title">Before you start</h3>
+      <ul class="listening-intro-view__rules-list">
+        <li>You must wear headphones or be in a quiet place for clear audio.</li>
+        <li>Audio will play only once — just like in the real exam.</li>
+        <li>You cannot pause, rewind, or replay the audio.</li>
+        <li>Answers must be selected while listening; transfer time is included.</li>
+        <li>Your final score will be auto-calculated after submission.</li>
+      </ul>
+    </div>
+  </TestIntroLayout>
 </template>
 
 <style scoped lang="scss">
 .listening-intro-view {
-  width: 100%;
-  height: 100%;
-  background-color: #ede8f8;
-  display: flex;
-  flex-direction: column;
-
-  &__content {
-    flex: 1;
-    padding: 16px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
   &__info-card {
     background-color: #ffffff;
     border-radius: 24px;

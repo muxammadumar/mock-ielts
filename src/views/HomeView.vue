@@ -1,22 +1,24 @@
 <template>
   <div class="home-view">
-    <UserHeader :points="dashboardData.points" />
+    <UserHeader :points="dashboardData?.points ?? 0" />
     <div class="home-view__content">
-      <ProgressOverviewCard
-        :progress-data="dashboardData.progressData"
-        :current-date="dashboardData.currentDate"
-        :score-band="dashboardData.scoreBand"
-      />
-      <div class="home-view__skills-grid">
-        <SkillScoreCard
-          v-for="skill in dashboardData.skillScores"
-          :key="skill.name"
-          :name="skill.name"
-          :score="skill.score"
-          :icon="skill.icon"
-          :color="skill.color"
+      <template v-if="dashboardData">
+        <ProgressOverviewCard
+          :progress-data="dashboardData.progressData"
+          :current-date="dashboardData.currentDate"
+          :score-band="dashboardData.scoreBand"
         />
-      </div>
+        <div class="home-view__skills-grid">
+          <SkillScoreCard
+            v-for="skill in dashboardData.skillScores"
+            :key="skill.name"
+            :name="skill.name"
+            :score="skill.score"
+            :icon="skill.icon"
+            :color="skill.color"
+          />
+        </div>
+      </template>
       <AIFeedbackCard />
     </div>
   </div>

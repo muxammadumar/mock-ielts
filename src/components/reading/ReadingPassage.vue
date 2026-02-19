@@ -14,10 +14,10 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="reading-passage">
+  <div v-if="passage" class="reading-passage">
     <div class="reading-passage__header" @click="emit('toggleCollapse')">
       <div class="reading-passage__header-text">
-        <p v-if="passage.subtitle" class="reading-passage__subtitle">
+        <p v-if="passage?.subtitle" class="reading-passage__subtitle">
           {{ passage.subtitle }} &ndash; {{ passage.title }}
         </p>
         <p v-else class="reading-passage__subtitle">{{ passage.title }}</p>
@@ -31,13 +31,9 @@ const emit = defineEmits<{
       />
     </div>
     <div v-show="!isCollapsed" class="reading-passage__body">
-      <div
-        v-for="para in passage.paragraphs"
-        :key="para.label"
-        class="reading-passage__paragraph"
-      >
+      <div v-for="para in passage.paragraphs" :key="para.label" class="reading-passage__paragraph">
         <p class="reading-passage__paragraph-text">
-          <span class="reading-passage__paragraph-label">{{ para.label }}.</span>
+          <span v-if="para.label" class="reading-passage__paragraph-label">{{ para.label }}.</span>
           {{ para.text }}
         </p>
       </div>

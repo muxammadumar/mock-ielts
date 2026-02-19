@@ -40,7 +40,7 @@ const inputValue = computed({
 
 <style scoped lang="scss">
 .reading-fib {
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 
   &__text {
     font-size: 18px;
@@ -58,6 +58,7 @@ const inputValue = computed({
   }
 
   &__input {
+    padding: 0px;
     :deep(.van-field__control) {
       border: 1px solid #e0e0e0;
       border-radius: 8px;

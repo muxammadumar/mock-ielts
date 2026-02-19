@@ -46,8 +46,7 @@ const router = createRouter({
       path: '/',
       name: 'main',
       component: () => import('@/layout/main.vue'),
-      meta: { requiresAuth: false },
-      // meta: { requiresAuth: true },
+      meta: { requiresAuth: true },
       children: [
         {
           path: 'home',
@@ -64,6 +63,14 @@ const router = createRouter({
           name: 'settings',
           component: () => import('@/views/SettingsView.vue'),
         },
+      ],
+    },
+    {
+      path: '/',
+      name: 'test',
+      component: () => import('@/layout/test.vue'),
+      meta: { requiresAuth: true },
+      children: [
         {
           path: 'listening-intro',
           name: 'listening-intro',
@@ -145,7 +152,7 @@ export const setupAuthGuards = (routerInstance: Router) => {
     // Check auth status from localStorage
     authStore.checkAuth()
 
-    const requiresAuth = to.meta.requiresAuth === true
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth === true)
     const isAuthenticated = authStore.isAuthenticated
 
     // If route requires auth and user is not authenticated, redirect to sign in

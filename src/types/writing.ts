@@ -5,6 +5,7 @@ export interface WritingTask {
   description: string
   imageUrl?: string
   minWords: number
+  taskKey: string
 }
 
 export interface WritingTest {
@@ -16,7 +17,7 @@ export interface WritingTest {
 }
 
 export interface WritingAnswer {
-  taskId: number
+  taskKey: string
   value: string
 }
 
