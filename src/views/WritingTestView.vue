@@ -22,9 +22,10 @@ const taskTitle = computed(() => `Writing · Part ${writingStore.currentTaskInde
 
 const submitButtonText = computed(() => (writingStore.isLastTask ? 'Submit' : 'Next Task'))
 
-const currentAnswer = computed(() => writingStore.getAnswer(currentTask.value?.taskKey)?.value ?? '')
+const currentAnswer = computed(() => writingStore.getAnswer(currentTask.value?.taskKey ?? '')?.value ?? '')
 
 const handleAnswerChange = (value: string) => {
+  if (!currentTask.value) return
   writingStore.setAnswer(currentTask.value.taskKey, value)
 }
 
