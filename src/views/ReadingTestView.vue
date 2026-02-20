@@ -20,6 +20,7 @@ const { testData, fetchTestData } = useReadingTest()
 // Computed properties
 const currentPartData = computed(() => {
   if (!testData.value) return null
+  console.log(testData.value.parts)
   return testData.value.parts[readingStore.currentPartIndex] || testData.value.parts[0]
 })
 
@@ -56,6 +57,22 @@ const handleBack = async () => {
 }
 
 const handleSubmit = async () => {
+  const currentQuestions = currentPartData.value?.questions ?? []
+  const unanswered = currentQuestions.filter(q => {
+    const ans = readingStore.answers[q.id]
+    if (!ans) return true
+    if (Array.isArray(ans.value)) return ans.value.length === 0
+    return ans.value.trim() === ''
+  })
+
+  if (unanswered.length > 0) {
+    showToast({
+      message: `Please answer all questions before continuing. ${unanswered.length} question(s) remaining.`,
+      duration: 3000,
+    })
+    return
+  }
+
   if (readingStore.isLastPart) {
     // Final submit
     try {
